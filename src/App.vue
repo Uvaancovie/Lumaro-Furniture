@@ -83,13 +83,13 @@ watch(
   () => [route.name, selectedProduct.value?.name] as const,
   ([name, productName]) => {
     if (name === 'product' && productName) {
-      document.title = `${productName} | SAFS Furniture`
+      document.title = `${productName} | South African Furniture`
     } else if (name === 'catalog') {
-      document.title = 'Catalog | SAFS Furniture'
+      document.title = 'Catalog | South African Furniture'
     } else if (name === 'admin') {
-      document.title = 'Admin Portal | SAFS Furniture'
+      document.title = 'Admin Portal | South African Furniture'
     } else {
-      document.title = 'SAFS Furniture — Handcrafted South African Hardwood Collection'
+      document.title = 'South African Furniture — Handcrafted Hardwood Collection'
     }
   },
   { immediate: true }
@@ -261,21 +261,22 @@ onMounted(() => {
         <!-- Logo -->
         <div 
           @click="navigateTo('landing')"
-          class="flex items-center space-x-2 sm:space-x-3 cursor-pointer group shrink-0"
+          class="flex items-center space-x-2.5 sm:space-x-3 cursor-pointer group shrink-0"
         >
-          <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl overflow-hidden shadow-xs border border-stone-200 bg-white flex items-center justify-center shrink-0">
+          <div class="w-12 h-12 rounded-xl sm:rounded-2xl overflow-hidden shadow-xs border border-stone-200 bg-white flex items-center justify-center shrink-0">
             <img 
               src="https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/south-african-furniture-logo/south-african-furniture.jpg" 
               alt="South African Furniture" 
               class="w-full h-full object-cover"
+              style="width: 48.1733px; height: 48.1733px;"
             />
           </div>
           <div>
             <span class="text-base sm:text-xl font-black text-slate-900 tracking-tight block group-hover:text-stone-700 transition-colors leading-tight">
-              SAFS <span class="text-stone-700"></span>
+              South African Furniture
             </span>
-            <span class="hidden sm:block text-[10px] text-stone-700 tracking-widest uppercase -mt-1 font-bold leading-tight">
-              South African Hardwoods
+            <span class="hidden sm:block text-[10px] text-stone-700 tracking-widest uppercase -mt-0.5 font-bold leading-tight">
+              Handcrafted Collection
             </span>
           </div>
         </div>
@@ -507,7 +508,7 @@ onMounted(() => {
     <footer class="bg-white border-t border-slate-200 text-slate-500 py-8 text-xs text-center">
       <div class="max-w-7xl mx-auto px-4 space-y-2">
         <p class="font-bold text-slate-800">
-          SAFS Furniture — Handcrafted South African Hardwood Collection
+          South African Furniture — Handcrafted Hardwood Collection
         </p>
         <p class="text-slate-400">
           Designed with Vue 3, Supabase PostgreSQL & Storage, hosted on Vercel Edge Serverless.
