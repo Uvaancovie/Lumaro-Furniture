@@ -263,8 +263,12 @@ onMounted(() => {
           @click="navigateTo('landing')"
           class="flex items-center space-x-2 sm:space-x-3 cursor-pointer group shrink-0"
         >
-          <div class="w-8 h-8 sm:w-10 sm:h-10 bg-stone-700 group-hover:bg-stone-800 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-md shadow-stone-700/20 transition-all">
-            <Building2 class="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+          <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl overflow-hidden shadow-xs border border-stone-200 bg-white flex items-center justify-center shrink-0">
+            <img 
+              src="https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/south-african-furniture-logo/south-african-furniture.jpg" 
+              alt="South African Furniture" 
+              class="w-full h-full object-cover"
+            />
           </div>
           <div>
             <span class="text-base sm:text-xl font-black text-slate-900 tracking-tight block group-hover:text-stone-700 transition-colors leading-tight">
