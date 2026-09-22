@@ -1,4 +1,4 @@
-# SAFS Furniture
+# Lumaro Furniture Studio 
 
 **Premium South African Hardwood Furniture Storefront**
 
