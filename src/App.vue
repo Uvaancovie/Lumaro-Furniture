@@ -263,12 +263,11 @@ onMounted(() => {
           @click="navigateTo('landing')"
           class="flex items-center space-x-2.5 sm:space-x-3 cursor-pointer group shrink-0"
         >
-          <div class="w-12 h-12 rounded-xl sm:rounded-2xl overflow-hidden shadow-xs border border-stone-200 bg-white flex items-center justify-center shrink-0">
+          <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl overflow-hidden shadow-xs border border-stone-200/80 bg-stone-50 flex items-center justify-center p-1 shrink-0">
             <img 
-              src="https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/south-african-furniture-logo/south-african-furniture.jpg" 
+              src="/lumaro-logo-transparent.png" 
               alt="Lumaro Furniture Studio" 
-              class="w-full h-full object-cover"
-              style="width: 48.1733px; height: 48.1733px;"
+              class="w-full h-full object-contain group-hover:scale-105 transition-transform"
             />
           </div>
           <div>
@@ -463,6 +462,7 @@ onMounted(() => {
           @open-wishlist="isWishlistOpen = true"
           @navigate-admin="navigateTo('admin')"
           @toggle-wishlist="toggleWishlist"
+          @navigate-home="navigateTo('landing')"
         />
       </div>
 
@@ -506,12 +506,24 @@ onMounted(() => {
 
     <!-- Royal White Footer -->
     <footer class="bg-white border-t border-slate-200 text-slate-500 py-8 text-xs text-center">
-      <div class="max-w-7xl mx-auto px-4 space-y-2">
+      <div class="max-w-7xl mx-auto px-4 flex flex-col items-center justify-center space-y-3">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-7 h-7 rounded-lg overflow-hidden border border-stone-200/80 shadow-xs bg-stone-50 flex items-center justify-center p-0.5">
+            <img 
+              src="/lumaro-logo-transparent.png" 
+              alt="Lumaro Furniture Studio Logo" 
+              class="w-full h-full object-contain"
+            />
+          </div>
+          <span class="font-black text-slate-900 text-sm tracking-tight uppercase">
+            Lumaro Furniture Studio
+          </span>
+        </div>
         <p class="font-bold text-slate-800">
-          Lumaro Furniture Studio — Handcrafted Hardwood Collection
+          Handcrafted Hardwood & Architectural Furniture Collection
         </p>
         <p class="text-slate-400">
-          Designed with Vue 3, Supabase PostgreSQL & Storage, hosted on Vercel Edge Serverless.
+          Crafted with sustainably sourced South African hardwoods, natural wax sealants, and precision joinery.
         </p>
       </div>
     </footer>

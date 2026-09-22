@@ -36,7 +36,17 @@ const props = defineProps<{
   wishlist?: Product[];
 }>()
 
-const emit = defineEmits(['explore-catalog', 'select-product', 'quick-add-to-cart', 'products-updated', 'open-cart', 'open-wishlist', 'navigate-admin', 'toggle-wishlist'])
+const emit = defineEmits([
+  'explore-catalog',
+  'select-product',
+  'quick-add-to-cart',
+  'products-updated',
+  'open-cart',
+  'open-wishlist',
+  'navigate-admin',
+  'toggle-wishlist',
+  'navigate-home'
+])
 
 const liveProducts = ref<Product[]>([])
 const loading = ref(false)
@@ -371,11 +381,23 @@ onBeforeUnmount(() => {
           </div>
         </div>
 
-        <!-- Brand Title (Center) -->
-        <div class="text-center">
-          <h1 class="text-xl md:text-2xl font-bold text-stone-950 tracking-tight uppercase">
-            Lumaro Furniture Studio
-          </h1>
+        <!-- Brand Title & Logo (Center) -->
+        <div class="flex items-center space-x-3 text-center cursor-pointer group" @click="emit('navigate-home')">
+          <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl overflow-hidden shadow-xs border border-stone-200/80 bg-stone-50 flex items-center justify-center p-1 shrink-0">
+            <img 
+              src="/lumaro-logo-transparent.png" 
+              alt="Lumaro Furniture Studio Logo" 
+              class="w-full h-full object-contain group-hover:scale-105 transition-transform"
+            />
+          </div>
+          <div class="text-left">
+            <h1 class="text-lg md:text-xl font-black text-stone-950 tracking-tight uppercase group-hover:text-stone-700 transition-colors leading-tight">
+              Lumaro Furniture Studio
+            </h1>
+            <span class="text-[9px] md:text-[10px] text-stone-600 tracking-widest uppercase font-bold block leading-tight">
+              Handcrafted Hardwoods
+            </span>
+          </div>
         </div>
 
         <!-- Quick Utility Icons (Right) -->
