@@ -4,6 +4,7 @@ import { supabase } from '../utils/supabase'
 import type { Product } from '../types/database'
 import {
   ArrowRight,
+  ArrowUpRight,
   ShieldCheck,
   Truck,
   Award,
@@ -27,7 +28,6 @@ import {
   Home,
   Palette,
   Layers,
-  Sparkles,
   Compass,
 } from 'lucide-vue-next'
 
@@ -45,28 +45,72 @@ const searchQuery = ref('')
 const mobileNavOpen = ref(false)
 const heroIndex = ref(0)
 const activeSector = ref('office')
+const activeMaterialIndex = ref(0)
 
 const heroSlides = [
   {
     image: 'https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/a9411a86-b059-468b-9c03-c29e311bbb71/1787296485552-0.jpg',
-    alt: '4-Piece Modern Circular Lounge Set - Espresso Round Table & 4 Grey Accent Chairs',
+    title: "DON'T JUST FURNISH.",
+    subtitle: "MAKE IT A THING.",
+    alt: '4-Piece Modern Circular Lounge Set',
   },
   {
     image: 'https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/58d59cbc-43e5-4488-9068-8b0b4f45ffcb/1787293170209-1.jpg',
-    alt: 'Luxury Contemporary Dining Set with Crescent Pedestal Table & High-Back Chairs',
+    title: 'TIMELESS SPACES.',
+    subtitle: 'SCULPTED TIMBER.',
+    alt: 'Luxury Contemporary Dining Set',
   },
   {
     image: 'https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/c1a82d73-957f-4f99-a34e-0c6aeb82562d/1786968369398-0.jpg',
-    alt: 'Luxor Geometric Upholstered Headboard with Gold Accents - Premium Grey',
+    title: 'STATEMENT PIECES.',
+    subtitle: 'BUILT FOR LIFE.',
+    alt: 'Luxor Geometric Headboard & Credenza',
   },
   {
     image: 'https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/abd82667-c642-4043-a57a-5fef2597dd23/1786602279649-0.jpg',
+    title: 'PURE MINIMALISM.',
+    subtitle: 'NATURAL TEXTURES.',
     alt: 'Modern Black Oval Pedestal Coffee Table',
   },
+]
+
+const materialsList = [
   {
-    image: 'https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/977e3408-1ea6-4518-a7fd-745c19aba022/1786016998600-0.jpg',
-    alt: 'Chair & Table Set',
+    id: 'natural-wood',
+    number: '01',
+    title: 'NATURAL WOOD',
+    category: 'Solid Hardwoods',
+    description: '100% solid indigenous South African Teak, Kiaat, and French Oak with natural grain continuity and high natural oil resilience.',
+    image: 'https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/a9411a86-b059-468b-9c03-c29e311bbb71/1787296485552-0.jpg',
+    specs: ['Kiln-dried to 8–10% moisture content', 'Traditional mortise & tenon joinery', 'Zero synthetic fillers or veneers']
   },
+  {
+    id: 'metal',
+    number: '02',
+    title: 'METAL',
+    category: 'Structural Accents',
+    description: 'Hand-brushed champagne brass, matte anodized aluminum, and aerospace powder-coated steel framework.',
+    image: 'https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/abd82667-c642-4043-a57a-5fef2597dd23/1786602279649-0.jpg',
+    specs: ['Matte black & champagne brass options', 'Seamless laser weld points', 'Corrosion-resistant marine finishes']
+  },
+  {
+    id: 'plywood',
+    number: '03',
+    title: 'PLYWOOD',
+    category: 'Curved Molded Timber',
+    description: 'Steam-bent multi-ply hardwood curves pressed under high-pressure hydraulic molds for anatomical support and fluid aesthetics.',
+    image: 'https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/58d59cbc-43e5-4488-9068-8b0b4f45ffcb/1787293170209-1.jpg',
+    specs: ['Ergonomic fluid silhouettes', 'High cross-grain structural strength', 'Hand-profiled chamfered edges']
+  },
+  {
+    id: 'eco-environment',
+    number: '04',
+    title: 'ECO-ENVIRONMENT',
+    category: 'Organic Wax & Sealants',
+    description: 'Plant-derived organic oils and non-toxic wax sealants that let the timber breathe while shielding from spills and moisture.',
+    image: 'https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/c1a82d73-957f-4f99-a34e-0c6aeb82562d/1786968369398-0.jpg',
+    specs: ['0% VOC (Volatile Organic Compounds)', 'Food-safe and family-friendly', 'Develops a rich natural patina with time']
+  }
 ]
 
 let heroTimer: ReturnType<typeof setInterval> | null = null
@@ -85,7 +129,7 @@ function goToHero(idx: number) {
 
 function restartHeroTimer() {
   if (heroTimer) clearInterval(heroTimer)
-  heroTimer = setInterval(nextHero, 5000)
+  heroTimer = setInterval(nextHero, 5500)
 }
 
 const navCategories = [
@@ -93,8 +137,6 @@ const navCategories = [
   'Couch',
   'Accent Tables & Chairs',
   'Shop By Room',
-  
-
   'Offers',
 ]
 
@@ -180,6 +222,53 @@ const displayBestsellers = computed(() => {
   return (featured.length > 0 ? featured : source).slice(0, 3)
 })
 
+const communityFavorites = computed(() => {
+  const source = (props.products && props.products.length > 0) ? props.products : liveProducts.value
+  if (source.length >= 4) {
+    return source.slice(0, 4).map((item) => ({
+      ...item,
+      displayTitle: item.name.toUpperCase(),
+      subtitle: item.material || 'Solid Hardwood & Natural Finish',
+      imageUrl: getPrimaryImageUrl(item),
+    }))
+  }
+
+  return [
+    {
+      id: 'fav-1',
+      name: 'MODERN STYLISH CHAIR',
+      displayTitle: 'MODERN STYLISH CHAIR',
+      category: 'Accent Seating',
+      subtitle: 'Full-Grain Bouclé & Dark Walnut',
+      imageUrl: 'https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/a9411a86-b059-468b-9c03-c29e311bbb71/1787296485552-0.jpg',
+    },
+    {
+      id: 'fav-2',
+      name: 'SLEEK LOUNGE CHAIR',
+      displayTitle: 'SLEEK LOUNGE CHAIR',
+      category: 'Living Room',
+      subtitle: 'Solid Teak & Aniline Leather',
+      imageUrl: 'https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/abd82667-c642-4043-a57a-5fef2597dd23/1786602279649-0.jpg',
+    },
+    {
+      id: 'fav-3',
+      name: 'STATEMENT DINING SUITE',
+      displayTitle: 'STATEMENT DINING SUITE',
+      category: 'Dining Room',
+      subtitle: 'French Oak & Crescent Pedestal',
+      imageUrl: 'https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/58d59cbc-43e5-4488-9068-8b0b4f45ffcb/1787293170209-1.jpg',
+    },
+    {
+      id: 'fav-4',
+      name: 'DESIGNER LOUNGE SEAT',
+      displayTitle: 'DESIGNER LOUNGE SEAT',
+      category: 'Accent Chairs',
+      subtitle: 'Sculptural Organic Silhouette',
+      imageUrl: 'https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/c1a82d73-957f-4f99-a34e-0c6aeb82562d/1786968369398-0.jpg',
+    }
+  ]
+})
+
 const craftsmanshipImageUrl = computed(() => {
   const source = (props.products && props.products.length > 0) ? props.products : liveProducts.value
   if (source.length > 0 && source[0].product_images && source[0].product_images.length > 0) {
@@ -210,12 +299,12 @@ function formatPrice(val: number) {
 
 const faqs = [
   {
-    question: 'How is SAFS Furniture delivered across South Africa?',
+    question: 'How is Lumaro Furniture Studio delivered across South Africa?',
     answer: 'We provide nationwide White-Glove furniture delivery across Gauteng, Western Cape, KZN, and all major provinces. Delivery includes room placement, unboxing, assembly, and packaging disposal.'
   },
   {
     question: 'Can I order custom dimensions for dining tables or credenzas?',
-    answer: 'Yes! All SAFS Furniture pieces are handcrafted in our South African workshop. We can adjust width, length, height, and timber finishes to match your interior design project.'
+    answer: 'Yes! All Lumaro Furniture Studio pieces are handcrafted in our South African workshop. We can adjust width, length, height, and timber finishes to match your interior design project.'
   },
   {
     question: 'What wood materials do you use?',
@@ -223,7 +312,7 @@ const faqs = [
   },
   {
     question: 'What warranty is included?',
-    answer: 'Every piece of SAFS Furniture is backed by our 10-Year Structural Timber Warranty against warping, joint separation, and structural defects.'
+    answer: 'Every piece of Lumaro Furniture Studio is backed by our 10-Year Structural Timber Warranty against warping, joint separation, and structural defects.'
   }
 ]
 
@@ -247,7 +336,7 @@ onBeforeUnmount(() => {
     <!-- 1. HERO & TOP HEADER SECTION -->
     <header class="w-full bg-white shadow-xs border-b border-stone-200">
 
-      <!-- Top Announcement Bar (Consistent with SAFS Beige, Black & White Palette) -->
+      <!-- Top Announcement Bar (Consistent with Lumaro Beige, Black & White Palette) -->
       <div class="bg-[#f5f2eb] text-stone-900 text-xs py-2.5 px-4 md:px-8 border-b border-stone-200 font-medium tracking-wide">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
           <div class="flex-1 text-center font-medium flex items-center justify-center space-x-2">
@@ -259,7 +348,7 @@ onBeforeUnmount(() => {
             </span>
           </div>
           <div class="hidden md:block text-right text-stone-600 text-[11px] font-semibold tracking-wider uppercase">
-            Welcome to <span class="text-stone-950 font-bold">South African Furniture</span>
+            Welcome to <span class="text-stone-950 font-bold">Lumaro Furniture Studio</span>
           </div>
         </div>
       </div>
@@ -284,8 +373,8 @@ onBeforeUnmount(() => {
 
         <!-- Brand Title (Center) -->
         <div class="text-center">
-          <h1 class="text-xl md:text-2xl font-semibold text-stone-950 tracking-wide uppercase">
-            Furniture
+          <h1 class="text-xl md:text-2xl font-bold text-stone-950 tracking-tight uppercase">
+            Lumaro Furniture Studio
           </h1>
         </div>
 
@@ -382,7 +471,7 @@ onBeforeUnmount(() => {
 
       <!-- Main Hero Visual Showcase Banner -->
       <section class="relative w-full overflow-hidden bg-stone-100">
-        <div class="relative w-full h-[400px] sm:h-[500px] md:h-[650px]">
+        <div class="relative w-full h-[450px] sm:h-[550px] md:h-[680px]">
           <Transition name="hero-fade">
             <img
               :key="heroIndex"
@@ -392,33 +481,68 @@ onBeforeUnmount(() => {
             />
           </Transition>
 
-          <!-- Subtle vignette for realistic room depth -->
-          <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"></div>
+          <!-- Gradient overlays for high text contrast and editorial depth -->
+          <div class="absolute inset-0 bg-gradient-to-r from-black/75 via-black/40 to-transparent"></div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20"></div>
+
+          <!-- Hero Editorial Overlay Text -->
+          <div class="absolute inset-0 flex flex-col justify-end p-6 md:p-12 lg:p-16 max-w-7xl mx-auto pointer-events-none">
+            <!-- Bottom Left Main Display Headline -->
+            <div class="space-y-4 max-w-2xl pointer-events-auto pb-4">
+              <div class="space-y-1">
+                <h2 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.05] drop-shadow-sm uppercase">
+                  {{ heroSlides[heroIndex].title }}
+                </h2>
+                <h2 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-stone-200 tracking-tight leading-[1.05] uppercase">
+                  {{ heroSlides[heroIndex].subtitle }}
+                </h2>
+              </div>
+              <p class="text-sm md:text-base text-stone-200 font-medium max-w-lg leading-relaxed drop-shadow-xs">
+                South African timber architectural furniture, custom manufactured for residential luxury, hospitality, and corporate executive suites.
+              </p>
+              <div class="flex flex-wrap items-center gap-3 pt-2">
+                <button
+                  @click="emit('explore-catalog')"
+                  class="px-7 py-3.5 bg-white hover:bg-stone-100 text-stone-950 font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg hover:shadow-xl transition-all inline-flex items-center space-x-2.5 cursor-pointer"
+                >
+                  <span>Explore Furniture</span>
+                  <ArrowRight class="w-4 h-4" />
+                </button>
+                <button
+                  @click="emit('explore-catalog')"
+                  class="px-7 py-3.5 bg-black/40 hover:bg-black/60 text-white font-bold text-xs uppercase tracking-wider rounded-xl backdrop-blur-md border border-white/30 transition-all inline-flex items-center space-x-2 cursor-pointer"
+                >
+                  <span>Custom Build</span>
+                  <ArrowUpRight class="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
 
           <!-- Prev / Next Arrows -->
           <button
             @click="prevHero(); restartHeroTimer()"
-            class="absolute left-4 top-1/2 -translate-y-1/2 p-2.5 bg-white/80 hover:bg-white text-stone-900 rounded-full shadow-md backdrop-blur-xs transition-colors cursor-pointer"
+            class="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-black/40 hover:bg-black/80 text-white rounded-full backdrop-blur-md border border-white/20 transition-all cursor-pointer z-10"
             aria-label="Previous slide"
           >
             <ChevronLeft class="w-5 h-5" />
           </button>
           <button
             @click="nextHero(); restartHeroTimer()"
-            class="absolute right-4 top-1/2 -translate-y-1/2 p-2.5 bg-white/80 hover:bg-white text-stone-900 rounded-full shadow-md backdrop-blur-xs transition-colors cursor-pointer"
+            class="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-black/40 hover:bg-black/80 text-white rounded-full backdrop-blur-md border border-white/20 transition-all cursor-pointer z-10"
             aria-label="Next slide"
           >
             <ChevronRight class="w-5 h-5" />
           </button>
 
           <!-- Dots Indicator -->
-          <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center space-x-2">
+          <div class="absolute bottom-6 right-6 md:right-12 flex items-center space-x-2.5 z-10">
             <button
               v-for="(slide, idx) in heroSlides"
               :key="idx"
               @click="goToHero(idx); restartHeroTimer()"
               class="h-2 rounded-full transition-all duration-300 cursor-pointer"
-              :class="idx === heroIndex ? 'w-8 bg-white' : 'w-2 bg-white/50 hover:bg-white/80'"
+              :class="idx === heroIndex ? 'w-10 bg-white shadow-md' : 'w-2.5 bg-white/40 hover:bg-white/70'"
               :aria-label="`Go to slide ${idx + 1}`"
             ></button>
           </div>
@@ -448,7 +572,81 @@ onBeforeUnmount(() => {
       </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 md:px-8 space-y-20">
+    <main class="max-w-7xl mx-auto px-4 md:px-8 space-y-24">
+
+      <!-- COMMUNITY FAVOURITE SHOWCASE GRID -->
+      <section class="space-y-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between border-b border-stone-200 pb-6 gap-4">
+          <div class="space-y-2">
+            <span class="text-xs font-bold tracking-widest text-stone-900 bg-[#f5f2eb] px-3.5 py-1 rounded-full border border-stone-300 inline-block">
+              FEATURED DESIGNS
+            </span>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-stone-950 tracking-tight uppercase">
+              Community Favourite
+            </h2>
+          </div>
+          <div class="flex items-center space-x-4">
+            <p class="text-xs text-stone-600 max-w-xs leading-relaxed font-medium hidden sm:block">
+              Our most celebrated handcrafted South African hardwood and upholstered silhouettes.
+            </p>
+            <button
+              @click="emit('explore-catalog')"
+              class="px-5 py-2.5 bg-stone-900 hover:bg-black text-white text-xs font-bold rounded-xl transition-all inline-flex items-center space-x-2 shrink-0 cursor-pointer"
+            >
+              <span>View All</span>
+              <ArrowRight class="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div
+            v-for="(item, index) in communityFavorites"
+            :key="item.id || index"
+            @click="emit('select-product', item)"
+            class="group bg-white rounded-2xl border border-stone-200/90 overflow-hidden shadow-xs hover:shadow-xl hover:border-stone-900 transition-all duration-300 cursor-pointer flex flex-col justify-between"
+          >
+            <!-- Product Image Frame -->
+            <div class="relative h-64 sm:h-72 w-full bg-stone-100 overflow-hidden">
+              <img
+                :src="item.imageUrl"
+                :alt="item.name"
+                class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              
+              <!-- Category Badge -->
+              <span class="absolute top-3 left-3 px-2.5 py-1 bg-white/90 backdrop-blur-xs text-stone-900 text-[10px] font-black uppercase tracking-wider rounded-md border border-stone-200/80 shadow-xs">
+                {{ item.category }}
+              </span>
+
+              <!-- Quick Action Button / Corner Pill -->
+              <button
+                @click.stop="emit('select-product', item)"
+                class="absolute bottom-3 right-3 p-2.5 bg-white text-stone-950 hover:bg-black hover:text-white rounded-full shadow-md transition-all duration-200 transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100"
+                aria-label="View Details"
+              >
+                <ArrowUpRight class="w-4 h-4" />
+              </button>
+            </div>
+
+            <!-- Product Details -->
+            <div class="p-5 space-y-1.5 bg-white flex-1 flex flex-col justify-between">
+              <div>
+                <span class="text-[10px] font-black tracking-widest uppercase text-stone-700 block">
+                  HANDCRAFTED TIMBER
+                </span>
+                <h3 class="text-sm font-black text-stone-950 uppercase tracking-tight group-hover:text-stone-700 transition-colors line-clamp-1">
+                  {{ item.displayTitle || item.name }}
+                </h3>
+              </div>
+              <p class="text-xs text-stone-500 font-medium line-clamp-1 pt-1">
+                {{ item.subtitle || 'Solid Hardwood & Natural Finish' }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <!-- 2. FEATURED CATEGORIES GRID -->
       <section class="space-y-8">
@@ -517,12 +715,12 @@ onBeforeUnmount(() => {
         </div>
       </section>
 
-      <!-- 3. CORE VALUES & STRATEGIC ADVANTAGE (THE SAFS DIFFERENCE) -->
+      <!-- 3. CORE VALUES & STRATEGIC ADVANTAGE (THE LUMARO DIFFERENCE) -->
       <section class="space-y-10">
         <div class="flex flex-col md:flex-row md:items-end justify-between border-b border-stone-200 pb-6 gap-4">
           <div class="space-y-2">
             <span class="text-xs font-bold tracking-widest text-stone-900 bg-[#f5f2eb] px-3.5 py-1 rounded-full border border-stone-300 inline-block">
-              THE SAFS DIFFERENCE
+              THE LUMARO DIFFERENCE
             </span>
             <h2 class="text-3xl md:text-4xl font-extrabold text-stone-950 tracking-tight">
               Core Values & Strategic Advantage
@@ -534,7 +732,7 @@ onBeforeUnmount(() => {
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          <!-- Left Panel: Strategic Advantage (The SAFS Difference Light Timber Pillar) -->
+          <!-- Left Panel: Strategic Advantage (The Lumaro Difference Light Timber Pillar) -->
           <div class="lg:col-span-5 bg-[#d6d3d1] text-stone-950 rounded-3xl p-8 md:p-10 border border-stone-400/80 shadow-md flex flex-col justify-between space-y-8 relative overflow-hidden">
             <!-- Subtle background accent element -->
             <div class="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full blur-3xl pointer-events-none"></div>
@@ -546,7 +744,7 @@ onBeforeUnmount(() => {
               </div>
 
               <h3 class="text-2xl font-extrabold text-stone-950 tracking-tight leading-snug">
-                Why Discerning Clients & Architects Partner with SAFS
+                Why Discerning Clients & Architects Partner with Lumaro
               </h3>
 
               <div class="space-y-6 pt-2">
@@ -1165,48 +1363,119 @@ onBeforeUnmount(() => {
         </div>
       </section>
 
-      <!-- 6. MATERIALS & FINISHES + SEAMLESS INTEGRATION -->
-      <section class="space-y-12">
-        <div class="text-center max-w-3xl mx-auto space-y-3">
-          <span class="text-xs font-extrabold text-stone-700 uppercase tracking-widest block">SUPERIOR CRAFT SPECIFICATIONS</span>
-          <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">Materials & Finishes.</h2>
+      <!-- 6. WE USE QUALITY AND SIMPLE MATERIALS (INTERACTIVE SHOWCASE) -->
+      <section class="space-y-10">
+        <div class="flex flex-col md:flex-row md:items-end justify-between border-b border-stone-200 pb-6 gap-4">
+          <div class="space-y-2">
+            <span class="text-xs font-bold tracking-widest text-stone-900 bg-[#f5f2eb] px-3.5 py-1 rounded-full border border-stone-300 inline-block">
+              ARTISANAL SOURCING
+            </span>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-stone-950 tracking-tight uppercase">
+              We Use Quality And Simple Materials
+            </h2>
+          </div>
+          <p class="text-xs text-stone-600 max-w-sm leading-relaxed font-medium">
+            Natural hardwoods, structural metals, and non-toxic organic sealants selected for multi-generational durability.
+          </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="bg-white p-7 rounded-3xl border border-slate-200 shadow-sm space-y-3">
-            <h3 class="text-base font-extrabold text-slate-900 border-b border-slate-100 pb-2">Premium Timbers</h3>
-            <ul class="space-y-1.5 text-xs text-slate-600">
-              <li>• Solid Walnut & Oak</li>
-              <li>• Ash & Reclaimed Wood</li>
-              <li>• High-Grade Veneers</li>
-            </ul>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+          <!-- Left Column: Material Number Tabs & Information -->
+          <div class="lg:col-span-6 flex flex-col justify-between space-y-4">
+            <div class="space-y-3">
+              <div
+                v-for="(mat, idx) in materialsList"
+                :key="mat.id"
+                @click="activeMaterialIndex = idx"
+                :class="[
+                  'p-5 md:p-6 rounded-2xl border transition-all duration-300 cursor-pointer flex items-start justify-between space-x-4',
+                  activeMaterialIndex === idx
+                    ? 'bg-white border-stone-950 shadow-md ring-1 ring-stone-950'
+                    : 'bg-white/60 border-stone-200 hover:bg-white hover:border-stone-400'
+                ]"
+              >
+                <div class="flex items-start space-x-4">
+                  <span
+                    :class="[
+                      'text-sm md:text-base font-black tracking-tight',
+                      activeMaterialIndex === idx ? 'text-stone-950' : 'text-stone-400'
+                    ]"
+                  >
+                    {{ mat.number }}
+                  </span>
+                  <div class="space-y-1">
+                    <div class="flex items-center space-x-2">
+                      <h3 class="text-base md:text-lg font-black text-stone-950 uppercase tracking-tight">
+                        {{ mat.title }}
+                      </h3>
+                      <span class="text-[10px] font-bold text-stone-500 uppercase tracking-wider bg-stone-100 px-2 py-0.5 rounded">
+                        {{ mat.category }}
+                      </span>
+                    </div>
+                    <p
+                      v-if="activeMaterialIndex === idx"
+                      class="text-xs text-stone-600 leading-relaxed font-normal pt-1"
+                    >
+                      {{ mat.description }}
+                    </p>
+                  </div>
+                </div>
+
+                <div
+                  :class="[
+                    'w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-colors',
+                    activeMaterialIndex === idx ? 'bg-stone-950 text-white' : 'bg-stone-100 text-stone-400'
+                  ]"
+                >
+                  <ArrowRight class="w-3.5 h-3.5" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Active Material Specifications Pill Box -->
+            <div class="p-6 bg-stone-100 rounded-2xl border border-stone-200 space-y-3">
+              <span class="text-[10px] font-black uppercase tracking-widest text-stone-700 block">
+                {{ materialsList[activeMaterialIndex].title }} SPECIFICATIONS
+              </span>
+              <ul class="space-y-2">
+                <li
+                  v-for="(spec, sIdx) in materialsList[activeMaterialIndex].specs"
+                  :key="sIdx"
+                  class="text-xs text-stone-700 flex items-center space-x-2 font-medium"
+                >
+                  <div class="w-1.5 h-1.5 bg-stone-900 rounded-full shrink-0"></div>
+                  <span>{{ spec }}</span>
+                </li>
+              </ul>
+            </div>
           </div>
 
-          <div class="bg-white p-7 rounded-3xl border border-slate-200 shadow-sm space-y-3">
-            <h3 class="text-base font-extrabold text-slate-900 border-b border-slate-100 pb-2">Metals & Accents</h3>
-            <ul class="space-y-1.5 text-xs text-slate-600">
-              <li>• Powder-Coated Steel</li>
-              <li>• Brushed Brass & Gold</li>
-              <li>• Polished Chrome</li>
-            </ul>
-          </div>
+          <!-- Right Column: Visual Material Photo Frame -->
+          <div class="lg:col-span-6 bg-stone-900 rounded-3xl overflow-hidden relative shadow-lg min-h-[380px] lg:min-h-full flex flex-col justify-end p-8 border border-stone-800">
+            <Transition name="hero-fade" mode="out-in">
+              <img
+                :key="activeMaterialIndex"
+                :src="materialsList[activeMaterialIndex].image"
+                :alt="materialsList[activeMaterialIndex].title"
+                class="absolute inset-0 w-full h-full object-cover object-center"
+              />
+            </Transition>
+            
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
 
-          <div class="bg-white p-7 rounded-3xl border border-slate-200 shadow-sm space-y-3">
-            <h3 class="text-base font-extrabold text-slate-900 border-b border-slate-100 pb-2">Textiles & Surfaces</h3>
-            <ul class="space-y-1.5 text-xs text-slate-600">
-              <li>• Full-Grain Leathers</li>
-              <li>• Performance Fabrics</li>
-              <li>• Solid Surfaces (Corian)</li>
-            </ul>
-          </div>
-
-          <div class="bg-white p-7 rounded-3xl border border-slate-200 shadow-sm space-y-3">
-            <h3 class="text-base font-extrabold text-slate-900 border-b border-slate-100 pb-2">Finishing Options</h3>
-            <ul class="space-y-1.5 text-xs text-slate-600">
-              <li>• Natural Hand-Rubbed Oils</li>
-              <li>• Matte & High-Gloss Lacquer</li>
-              <li>• Custom Stain Matching</li>
-            </ul>
+            <div class="relative z-10 text-white space-y-2">
+              <div class="flex items-center space-x-2">
+                <span class="px-2.5 py-0.5 bg-white/20 backdrop-blur-md rounded text-[10px] font-black uppercase tracking-widest">
+                  MATERIAL FOCUS {{ materialsList[activeMaterialIndex].number }}
+                </span>
+              </div>
+              <h3 class="text-2xl md:text-3xl font-black uppercase tracking-tight">
+                {{ materialsList[activeMaterialIndex].title }}
+              </h3>
+              <p class="text-xs text-stone-300 max-w-md line-clamp-2">
+                {{ materialsList[activeMaterialIndex].description }}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -1275,7 +1544,7 @@ onBeforeUnmount(() => {
           <div class="lg:col-span-6 relative rounded-2xl overflow-hidden shadow-2xl border border-slate-200 group">
             <img
               :src="craftsmanshipImageUrl"
-              alt="SAFS Furniture Authentic Timber Craftsmanship"
+              alt="Lumaro Furniture Studio Authentic Timber Craftsmanship"
               class="w-full h-[400px] object-cover group-hover:scale-105 transition-transform duration-500"
             />
             <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl text-xs font-bold text-slate-900 border border-slate-200 shadow-md">
@@ -1286,12 +1555,12 @@ onBeforeUnmount(() => {
           <!-- Text Right -->
           <div class="lg:col-span-6 space-y-6">
             <div class="space-y-2">
-              <span class="text-xs font-extrabold text-stone-700 uppercase tracking-widest block">The SAFS Furniture Guarantee</span>
+              <span class="text-xs font-extrabold text-stone-700 uppercase tracking-widest block">The Lumaro Furniture Studio Guarantee</span>
               <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 leading-tight">
                 Uncompromising Quality & Authentic Timber
               </h2>
               <p class="text-slate-600 text-sm leading-relaxed">
-                We reject mass-produced veneers and synthetic boards. Every SAFS Furniture item is sculpted from solid hardwoods, hand-finished with organic wax sealants that highlight natural grain patterns.
+                We reject mass-produced veneers and synthetic boards. Every Lumaro Furniture Studio item is sculpted from solid hardwoods, hand-finished with organic wax sealants that highlight natural grain patterns.
               </p>
             </div>
 
@@ -1377,7 +1646,7 @@ onBeforeUnmount(() => {
                 <h3 class="text-lg font-extrabold text-slate-900 group-hover:text-stone-700 transition-colors">
                   {{ product.name }}
                 </h3>
-                <p class="text-slate-500 text-xs line-clamp-2">{{ product.description || 'Solid hardwood furniture piece from SAFS Furniture.' }}</p>
+                <p class="text-slate-500 text-xs line-clamp-2">{{ product.description || 'Solid hardwood furniture piece from Lumaro Furniture Studio.' }}</p>
               </div>
 
               <div class="pt-4 border-t border-slate-100 flex items-center justify-end">

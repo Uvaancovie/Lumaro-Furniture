@@ -83,13 +83,13 @@ watch(
   () => [route.name, selectedProduct.value?.name] as const,
   ([name, productName]) => {
     if (name === 'product' && productName) {
-      document.title = `${productName} | South African Furniture`
+      document.title = `${productName} | Lumaro Furniture Studio`
     } else if (name === 'catalog') {
-      document.title = 'Catalog | South African Furniture'
+      document.title = 'Catalog | Lumaro Furniture Studio'
     } else if (name === 'admin') {
-      document.title = 'Admin Portal | South African Furniture'
+      document.title = 'Admin Portal | Lumaro Furniture Studio'
     } else {
-      document.title = 'South African Furniture — Handcrafted Hardwood Collection'
+      document.title = 'Lumaro Furniture Studio — Handcrafted Hardwood Collection'
     }
   },
   { immediate: true }
@@ -175,7 +175,7 @@ function removeCartItem(index: number) {
 }
 
 function handleCheckout() {
-  showToast('Checkout initialized! Thank you for choosing SAFS Furniture.')
+  showToast('Checkout initialized! Thank you for choosing Lumaro Furniture Studio.')
   cartItems.value = []
   isCartOpen.value = false
 }
@@ -266,14 +266,14 @@ onMounted(() => {
           <div class="w-12 h-12 rounded-xl sm:rounded-2xl overflow-hidden shadow-xs border border-stone-200 bg-white flex items-center justify-center shrink-0">
             <img 
               src="https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/south-african-furniture-logo/south-african-furniture.jpg" 
-              alt="South African Furniture" 
+              alt="Lumaro Furniture Studio" 
               class="w-full h-full object-cover"
               style="width: 48.1733px; height: 48.1733px;"
             />
           </div>
           <div>
             <span class="text-base sm:text-xl font-black text-slate-900 tracking-tight block group-hover:text-stone-700 transition-colors leading-tight">
-              South African Furniture
+              Lumaro Furniture Studio
             </span>
             <span class="hidden sm:block text-[10px] text-stone-700 tracking-widest uppercase -mt-0.5 font-bold leading-tight">
               Handcrafted Collection
@@ -508,7 +508,7 @@ onMounted(() => {
     <footer class="bg-white border-t border-slate-200 text-slate-500 py-8 text-xs text-center">
       <div class="max-w-7xl mx-auto px-4 space-y-2">
         <p class="font-bold text-slate-800">
-          South African Furniture — Handcrafted Hardwood Collection
+          Lumaro Furniture Studio — Handcrafted Hardwood Collection
         </p>
         <p class="text-slate-400">
           Designed with Vue 3, Supabase PostgreSQL & Storage, hosted on Vercel Edge Serverless.

@@ -33,7 +33,7 @@ function getPrimaryImageUrl(product: Product): string {
         <div class="p-6 border-b border-slate-200 flex items-center justify-between bg-slate-50">
           <div class="flex items-center space-x-2">
             <Heart class="w-5 h-5 text-rose-600" />
-            <h2 class="text-lg font-extrabold text-slate-900">SAFS Furniture Wishlist</h2>
+            <h2 class="text-lg font-extrabold text-slate-900">Lumaro Furniture Studio Wishlist</h2>
             <span class="px-2 py-0.5 bg-rose-100 text-rose-700 text-xs font-bold rounded-full">
               {{ wishlist.length }}
             </span>
@@ -49,7 +49,7 @@ function getPrimaryImageUrl(product: Product): string {
           <div v-if="wishlist.length === 0" class="text-center py-16 space-y-3">
             <Heart class="w-12 h-12 text-slate-300 mx-auto" />
             <p class="text-slate-600 font-semibold">Your wishlist is empty</p>
-            <p class="text-xs text-slate-400 max-w-xs mx-auto">Save your favourite SAFS Furniture pieces and come back to them later.</p>
+            <p class="text-xs text-slate-400 max-w-xs mx-auto">Save your favourite Lumaro Furniture Studio pieces and come back to them later.</p>
           </div>
 
           <div

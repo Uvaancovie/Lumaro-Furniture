@@ -25,7 +25,7 @@ const emit = defineEmits(['close', 'update-quantity', 'remove-item', 'checkout']
         <div class="p-6 border-b border-slate-200 flex items-center justify-between bg-slate-50">
           <div class="flex items-center space-x-2">
             <ShoppingBag class="w-5 h-5 text-stone-700" />
-            <h2 class="text-lg font-extrabold text-slate-900">SAFS Furniture Cart</h2>
+            <h2 class="text-lg font-extrabold text-slate-900">Lumaro Furniture Studio Cart</h2>
             <span class="px-2 py-0.5 bg-stone-100 text-stone-800 text-xs font-bold rounded-full">
               {{ cartItems.length }}
             </span>
@@ -41,7 +41,7 @@ const emit = defineEmits(['close', 'update-quantity', 'remove-item', 'checkout']
           <div v-if="cartItems.length === 0" class="text-center py-16 space-y-3">
             <ShoppingBag class="w-12 h-12 text-slate-300 mx-auto" />
             <p class="text-slate-600 font-semibold">Your shopping cart is empty</p>
-            <p class="text-xs text-slate-400 max-w-xs mx-auto">Explore our SAFS Furniture catalog and add pieces to your cart.</p>
+            <p class="text-xs text-slate-400 max-w-xs mx-auto">Explore our Lumaro Furniture Studio catalog and add pieces to your cart.</p>
           </div>
 
           <div 

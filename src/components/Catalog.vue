@@ -87,7 +87,7 @@ const sampleProducts: Product[] = [
     color: 'Oatmeal',
     width: 280, height: 80, depth: 180,
     is_active: true, is_featured: true,
-    description: 'The posterchild for SAFS classic, oversized couch design. With its comfy, lived-in look, the Santorini is one we are known for.',
+    description: 'The posterchild for Lumaro Furniture Studio classic, oversized couch design. With its comfy, lived-in look, the Santorini is one we are known for.',
     sku: 'SOFA-SAN-003',
     product_images: [
       { id: 'img-3', product_id: 'sample-3', image_url: 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=1200&q=80', is_primary: true }

@@ -581,7 +581,7 @@ onMounted(() => {
             <span>{{ editingProductId ? 'Edit Furniture Item' : 'Upload New Furniture Item' }}</span>
           </h2>
           <p class="text-xs text-slate-500 mt-1">
-            {{ editingProductId ? 'Update the details below. Changes will be reflected immediately on the storefront.' : 'Fill in details and attach images to publish directly to your live SAFS Furniture store.' }}
+            {{ editingProductId ? 'Update the details below. Changes will be reflected immediately on the storefront.' : 'Fill in details and attach images to publish directly to your live Lumaro Furniture Studio store.' }}
           </p>
         </div>
         <button

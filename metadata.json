@@ -1,6 +1,6 @@
 {
-  "name": "South African Furniture",
-  "description": "Handcrafted South African Hardwood Furniture Store",
+  "name": "Lumaro Furniture Studio",
+  "description": "Handcrafted Hardwood & Architectural Furniture by Lumaro Furniture Studio",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
