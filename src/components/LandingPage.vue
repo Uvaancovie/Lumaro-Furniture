@@ -24,7 +24,6 @@ import {
   Briefcase,
   Building,
   Store,
-  GraduationCap,
   Home,
   Palette,
   Layers,
@@ -86,13 +85,12 @@ const heroSlides = [
 
 const materialsList = [
   {
-    id: 'natural-wood',
+    id: 'wood',
     number: '01',
-    title: 'NATURAL WOOD',
-    category: 'Solid Hardwoods',
-    description: '100% solid indigenous South African Teak, Kiaat, and French Oak with natural grain continuity and high natural oil resilience.',
+    title: 'WOOD',
+    category: 'WOODEN',
+    description: '100% solid wood with natural grain continuity and high resilience.',
     image: 'https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/a9411a86-b059-468b-9c03-c29e311bbb71/1787296485552-0.jpg',
-    specs: ['Kiln-dried to 8–10% moisture content', 'Traditional mortise & tenon joinery', 'Zero synthetic fillers or veneers']
   },
   {
     id: 'metal',
@@ -101,25 +99,14 @@ const materialsList = [
     category: 'Structural Accents',
     description: 'Hand-brushed champagne brass, matte anodized aluminum, and aerospace powder-coated steel framework.',
     image: 'https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/abd82667-c642-4043-a57a-5fef2597dd23/1786602279649-0.jpg',
-    specs: ['Matte black & champagne brass options', 'Seamless laser weld points', 'Corrosion-resistant marine finishes']
-  },
-  {
-    id: 'plywood',
-    number: '03',
-    title: 'PLYWOOD',
-    category: 'Curved Molded Timber',
-    description: 'Steam-bent multi-ply hardwood curves pressed under high-pressure hydraulic molds for anatomical support and fluid aesthetics.',
-    image: 'https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/58d59cbc-43e5-4488-9068-8b0b4f45ffcb/1787293170209-1.jpg',
-    specs: ['Ergonomic fluid silhouettes', 'High cross-grain structural strength', 'Hand-profiled chamfered edges']
   },
   {
     id: 'eco-environment',
-    number: '04',
+    number: '03',
     title: 'ECO-ENVIRONMENT',
-    category: 'Organic Wax & Sealants',
-    description: 'Plant-derived organic oils and non-toxic wax sealants that let the timber breathe while shielding from spills and moisture.',
+    category: 'Protective Finishes',
+    description: 'Plant-derived oils and non-toxic sealants that let the wood breathe while shielding from spills and moisture.',
     image: 'https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/c1a82d73-957f-4f99-a34e-0c6aeb82562d/1786968369398-0.jpg',
-    specs: ['0% VOC (Volatile Organic Compounds)', 'Food-safe and family-friendly', 'Develops a rich natural patina with time']
   }
 ]
 
@@ -187,10 +174,10 @@ const defaultRealInventory: Product[] = [
     category: 'Storage',
     price: 14200.00,
     stock_quantity: 8,
-    material: 'French Oak & Brushed Brass',
+    material: 'Solid Wood & Brushed Brass',
     width: 180, height: 80, depth: 45,
     is_active: true, is_featured: true,
-    description: 'Minimalist sideboard with soft-close slatted oak doors.',
+    description: 'Minimalist sideboard with soft-close slatted wood doors.',
     sku: 'STG-OAK-003',
     product_images: [{ id: 'img-3', product_id: 'real-3', image_url: 'https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=1200&q=80', is_primary: true }]
   }
@@ -265,7 +252,7 @@ const communityFavorites = computed(() => {
       name: 'STATEMENT DINING SUITE',
       displayTitle: 'STATEMENT DINING SUITE',
       category: 'Dining Room',
-      subtitle: 'French Oak & Crescent Pedestal',
+      subtitle: 'Solid Wood & Crescent Pedestal',
       imageUrl: 'https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/58d59cbc-43e5-4488-9068-8b0b4f45ffcb/1787293170209-1.jpg',
     },
     {
@@ -318,7 +305,7 @@ const faqs = [
   },
   {
     question: 'What wood materials do you use?',
-    answer: 'We craft exclusively with 100% solid, sustainably harvested South African Teak, European & French Oak, Ash, and Walnut. We never use cheap particleboard or veneers.'
+    answer: 'We use sustainably harvested woods, solid wood, oaks, and ashwood sourced responsibly.'
   },
   {
     question: 'What warranty is included?',
@@ -383,12 +370,8 @@ onBeforeUnmount(() => {
 
         <!-- Brand Title & Logo (Center) -->
         <div class="flex items-center space-x-3 text-center cursor-pointer group" @click="emit('navigate-home')">
-          <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl overflow-hidden shadow-xs border border-stone-200/80 bg-stone-50 flex items-center justify-center p-1 shrink-0">
-            <img 
-              src="/lumaro-logo-transparent.png" 
-              alt="Lumaro Furniture Studio Logo" 
-              class="w-full h-full object-contain group-hover:scale-105 transition-transform"
-            />
+          <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-white text-stone-950 border-2 border-stone-900 flex items-center justify-center p-1 shrink-0 font-black text-sm md:text-base tracking-wider shadow-xs group-hover:border-stone-700 transition-colors">
+            LFS
           </div>
           <div class="text-left">
             <h1 class="text-lg md:text-xl font-black text-stone-950 tracking-tight uppercase group-hover:text-stone-700 transition-colors leading-tight">
@@ -509,16 +492,8 @@ onBeforeUnmount(() => {
 
           <!-- Hero Editorial Overlay Text -->
           <div class="absolute inset-0 flex flex-col justify-end p-6 md:p-12 lg:p-16 max-w-7xl mx-auto pointer-events-none">
-            <!-- Bottom Left Main Display Headline -->
+            <!-- Bottom Left Main Content -->
             <div class="space-y-4 max-w-2xl pointer-events-auto pb-4">
-              <div class="space-y-1">
-                <h2 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.05] drop-shadow-sm uppercase">
-                  {{ heroSlides[heroIndex].title }}
-                </h2>
-                <h2 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-stone-200 tracking-tight leading-[1.05] uppercase">
-                  {{ heroSlides[heroIndex].subtitle }}
-                </h2>
-              </div>
               <p class="text-sm md:text-base text-stone-200 font-medium max-w-lg leading-relaxed drop-shadow-xs">
                 South African timber architectural furniture, custom manufactured for residential luxury, hospitality, and corporate executive suites.
               </p>
@@ -570,28 +545,6 @@ onBeforeUnmount(() => {
           </div>
         </div>
       </section>
-
-      <!-- Value Props Ticker Below Hero -->
-      <div class="bg-stone-900 text-stone-200 py-3.5 px-4 text-xs font-bold border-t border-stone-800">
-        <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-          <div class="flex items-center justify-center space-x-2">
-            <Award class="w-4 h-4 text-stone-400 shrink-0" />
-            <span>100% Solid Hardwood</span>
-          </div>
-          <div class="flex items-center justify-center space-x-2">
-            <ShieldCheck class="w-4 h-4 text-stone-400 shrink-0" />
-            <span>10-Year Warranty</span>
-          </div>
-          <div class="flex items-center justify-center space-x-2">
-            <Truck class="w-4 h-4 text-stone-400 shrink-0" />
-            <span>White-Glove SA Delivery</span>
-          </div>
-          <div class="flex items-center justify-center space-x-2">
-            <Hammer class="w-4 h-4 text-stone-400 shrink-0" />
-            <span>Custom Made to Order</span>
-          </div>
-        </div>
-      </div>
     </header>
 
     <main class="max-w-7xl mx-auto px-4 md:px-8 space-y-24">
@@ -1055,19 +1008,6 @@ onBeforeUnmount(() => {
           </button>
 
           <button
-            @click="activeSector = 'edu_health'"
-            :class="[
-              'px-5 py-3 rounded-2xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer flex items-center space-x-2 border',
-              activeSector === 'edu_health'
-                ? 'bg-stone-900 text-white border-stone-900 shadow-md'
-                : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
-            ]"
-          >
-            <GraduationCap class="w-4 h-4" />
-            <span>Educational & Healthcare</span>
-          </button>
-
-          <button
             @click="activeSector = 'residential'"
             :class="[
               'px-5 py-3 rounded-2xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer flex items-center space-x-2 border',
@@ -1283,56 +1223,6 @@ onBeforeUnmount(() => {
             </div>
           </div>
 
-          <!-- Educational & Healthcare -->
-          <div v-else-if="activeSector === 'edu_health'" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div class="lg:col-span-5 space-y-5">
-              <span class="px-3 py-1 bg-[#f5f2eb] text-stone-900 text-[10px] font-black uppercase tracking-widest rounded-full border border-stone-300/60 inline-block">Specialized Engineering</span>
-              <h3 class="text-2xl md:text-3xl font-extrabold text-slate-900">Educational & Healthcare</h3>
-              <p class="text-xs text-slate-600 leading-relaxed">Durable, ergonomic designs engineered for specialized and demanding environments.</p>
-              <button
-                @click="emit('explore-catalog')"
-                class="px-6 py-2.5 bg-stone-900 text-white hover:bg-stone-800 text-xs font-bold rounded-xl transition-all cursor-pointer inline-flex items-center space-x-2"
-              >
-                <span>View Institutional Fit-outs</span>
-                <ArrowRight class="w-3.5 h-3.5" />
-              </button>
-            </div>
-            <div class="lg:col-span-7 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div class="bg-stone-50 rounded-2xl border border-stone-200 overflow-hidden group hover:shadow-md transition-all">
-                <div class="h-36 overflow-hidden relative">
-                  <img src="https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/977e3408-1ea6-4518-a7fd-745c19aba022/1786016998600-0.jpg" alt="Robust School Furniture" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <span class="absolute top-2.5 left-2.5 text-[9px] font-black text-stone-950 bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded-md uppercase tracking-wider border border-stone-200">INSTITUTIONAL 01</span>
-                </div>
-                <div class="p-4 space-y-1.5">
-                  <h4 class="text-sm font-extrabold text-slate-900">Robust School Furniture</h4>
-                  <p class="text-[11px] text-slate-500 leading-normal">Heavy-duty timber desks built for multi-decade resilience.</p>
-                </div>
-              </div>
-
-              <div class="bg-stone-50 rounded-2xl border border-stone-200 overflow-hidden group hover:shadow-md transition-all">
-                <div class="h-36 overflow-hidden relative">
-                  <img src="https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/c1a82d73-957f-4f99-a34e-0c6aeb82562d/1786968369398-0.jpg" alt="Medical Grade Cabinetry" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <span class="absolute top-2.5 left-2.5 text-[9px] font-black text-stone-950 bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded-md uppercase tracking-wider border border-stone-200">INSTITUTIONAL 02</span>
-                </div>
-                <div class="p-4 space-y-1.5">
-                  <h4 class="text-sm font-extrabold text-slate-900">Medical Grade Cabinetry</h4>
-                  <p class="text-[11px] text-slate-500 leading-normal">Hygienic sealed timber and non-porous composite storage.</p>
-                </div>
-              </div>
-
-              <div class="bg-stone-50 rounded-2xl border border-stone-200 overflow-hidden group hover:shadow-md transition-all">
-                <div class="h-36 overflow-hidden relative">
-                  <img src="https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/abd82667-c642-4043-a57a-5fef2597dd23/1786602279649-0.jpg" alt="Laboratory Workstations" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <span class="absolute top-2.5 left-2.5 text-[9px] font-black text-stone-950 bg-white/90 backdrop-blur-xs px-2 py-0.5 rounded-md uppercase tracking-wider border border-stone-200">INSTITUTIONAL 03</span>
-                </div>
-                <div class="p-4 space-y-1.5">
-                  <h4 class="text-sm font-extrabold text-slate-900">Laboratory Workstations</h4>
-                  <p class="text-[11px] text-slate-500 leading-normal">Chemical-resistant surfaces integrated with solid wood framing.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
           <!-- Residential -->
           <div v-else-if="activeSector === 'residential'" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div class="lg:col-span-5 space-y-5">
@@ -1397,7 +1287,7 @@ onBeforeUnmount(() => {
             </h2>
           </div>
           <p class="text-xs text-stone-600 max-w-sm leading-relaxed font-medium">
-            Natural hardwoods, structural metals, and non-toxic organic sealants selected for multi-generational durability.
+            Quality woods, structural metals, and protective sealants selected for enduring durability.
           </p>
         </div>
 
@@ -1452,23 +1342,6 @@ onBeforeUnmount(() => {
                   <ArrowRight class="w-3.5 h-3.5" />
                 </div>
               </div>
-            </div>
-
-            <!-- Active Material Specifications Pill Box -->
-            <div class="p-6 bg-stone-100 rounded-2xl border border-stone-200 space-y-3">
-              <span class="text-[10px] font-black uppercase tracking-widest text-stone-700 block">
-                {{ materialsList[activeMaterialIndex].title }} SPECIFICATIONS
-              </span>
-              <ul class="space-y-2">
-                <li
-                  v-for="(spec, sIdx) in materialsList[activeMaterialIndex].specs"
-                  :key="sIdx"
-                  class="text-xs text-stone-700 flex items-center space-x-2 font-medium"
-                >
-                  <div class="w-1.5 h-1.5 bg-stone-900 rounded-full shrink-0"></div>
-                  <span>{{ spec }}</span>
-                </li>
-              </ul>
             </div>
           </div>
 
@@ -1579,10 +1452,10 @@ onBeforeUnmount(() => {
             <div class="space-y-2">
               <span class="text-xs font-extrabold text-stone-700 uppercase tracking-widest block">The Lumaro Furniture Studio Guarantee</span>
               <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 leading-tight">
-                Uncompromising Quality & Authentic Timber
+                Every Lumaro Studio Item is Sculpted from Wood
               </h2>
               <p class="text-slate-600 text-sm leading-relaxed">
-                We reject mass-produced veneers and synthetic boards. Every Lumaro Furniture Studio item is sculpted from solid hardwoods, hand-finished with organic wax sealants that highlight natural grain patterns.
+                Every Lumaro Furniture Studio item is sculpted from wood, finished with sealants and high natural grain patterns.
               </p>
             </div>
 
@@ -1590,8 +1463,8 @@ onBeforeUnmount(() => {
               <div class="flex items-start space-x-3">
                 <CheckCircle2 class="w-5 h-5 text-stone-700 shrink-0 mt-0.5" />
                 <div>
-                  <h4 class="font-bold text-slate-900 text-sm">Sustainably Harvested Hardwoods</h4>
-                  <p class="text-xs text-slate-500">Certified solid teak, French oak, and ash wood sourced responsibly.</p>
+                  <h4 class="font-bold text-slate-900 text-sm">Sustainably Harvested Woods</h4>
+                  <p class="text-xs text-slate-500">We use sustainably harvested woods, solid wood, oaks, and ashwood sourced responsibly.</p>
                 </div>
               </div>
 
@@ -1599,14 +1472,14 @@ onBeforeUnmount(() => {
                 <CheckCircle2 class="w-5 h-5 text-stone-700 shrink-0 mt-0.5" />
                 <div>
                   <h4 class="font-bold text-slate-900 text-sm">Mortise & Tenon Joinery</h4>
-                  <p class="text-xs text-slate-500">Traditional wood joinery methods providing structural stability that lasts decades.</p>
+                  <p class="text-xs text-slate-500">Traditional wood joinery methods providing structural stability.</p>
                 </div>
               </div>
 
               <div class="flex items-start space-x-3">
                 <CheckCircle2 class="w-5 h-5 text-stone-700 shrink-0 mt-0.5" />
                 <div>
-                  <h4 class="font-bold text-slate-900 text-sm">Non-Toxic Natural Wax Sealants</h4>
+                  <h4 class="font-bold text-slate-900 text-sm">Non-Toxic Protective Sealants</h4>
                   <p class="text-xs text-slate-500">Eco-friendly protective finishes safe for indoor environments and family living.</p>
                 </div>
               </div>

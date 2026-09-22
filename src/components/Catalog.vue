@@ -117,7 +117,7 @@ const sampleProducts: Product[] = [
     category: 'Storage',
     price: 14200.00,
     stock_quantity: 4,
-    material: 'French Oak & Brushed Brass',
+    material: 'Solid Wood & Brushed Brass',
     color: 'Natural Matte Oak',
     width: 180, height: 80, depth: 45,
     is_active: true, is_featured: false,

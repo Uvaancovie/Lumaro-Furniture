@@ -263,12 +263,8 @@ onMounted(() => {
           @click="navigateTo('landing')"
           class="flex items-center space-x-2.5 sm:space-x-3 cursor-pointer group shrink-0"
         >
-          <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl overflow-hidden shadow-xs border border-stone-200/80 bg-stone-50 flex items-center justify-center p-1 shrink-0">
-            <img 
-              src="/lumaro-logo-transparent.png" 
-              alt="Lumaro Furniture Studio" 
-              class="w-full h-full object-contain group-hover:scale-105 transition-transform"
-            />
+          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white text-stone-950 border-2 border-stone-900 flex items-center justify-center p-1 shrink-0 font-black text-sm sm:text-base tracking-wider group-hover:border-stone-700 transition-colors shadow-xs">
+            LFS
           </div>
           <div>
             <span class="text-base sm:text-xl font-black text-slate-900 tracking-tight block group-hover:text-stone-700 transition-colors leading-tight">
@@ -508,12 +504,8 @@ onMounted(() => {
     <footer class="bg-white border-t border-slate-200 text-slate-500 py-8 text-xs text-center">
       <div class="max-w-7xl mx-auto px-4 flex flex-col items-center justify-center space-y-3">
         <div class="flex items-center space-x-2.5">
-          <div class="w-7 h-7 rounded-lg overflow-hidden border border-stone-200/80 shadow-xs bg-stone-50 flex items-center justify-center p-0.5">
-            <img 
-              src="/lumaro-logo-transparent.png" 
-              alt="Lumaro Furniture Studio Logo" 
-              class="w-full h-full object-contain"
-            />
+          <div class="w-7 h-7 rounded-lg bg-white text-stone-950 border border-stone-900 flex items-center justify-center font-black text-xs tracking-wider shadow-xs">
+            LFS
           </div>
           <span class="font-black text-slate-900 text-sm tracking-tight uppercase">
             Lumaro Furniture Studio
