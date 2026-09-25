@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { supabase } from '../utils/supabase'
+import { defaultFurnitureInventory } from '../utils/defaultProducts'
 import type { Product } from '../types/database'
 import {
   ArrowRight,
@@ -47,14 +48,59 @@ const emit = defineEmits([
   'navigate-home'
 ])
 
-const liveProducts = ref<Product[]>([])
+const liveProducts = ref<Product[]>(defaultFurnitureInventory)
 const loading = ref(false)
 const activeFaq = ref<number | null>(0)
 const searchQuery = ref('')
+const isSearchOpen = ref(false)
 const mobileNavOpen = ref(false)
 const heroIndex = ref(0)
 const activeSector = ref('office')
 const activeMaterialIndex = ref(0)
+
+const allAvailableProducts = computed<Product[]>(() => {
+  if (props.products && props.products.length > 0) return props.products
+  if (liveProducts.value && liveProducts.value.length > 0) return liveProducts.value
+  return defaultFurnitureInventory
+})
+
+const filteredSearchResults = computed<Product[]>(() => {
+  const query = searchQuery.value.trim().toLowerCase()
+  const list = allAvailableProducts.value
+  if (!query) {
+    return list.slice(0, 8)
+  }
+  return list.filter(p => {
+    return (
+      p.name.toLowerCase().includes(query) ||
+      (p.category && p.category.toLowerCase().includes(query)) ||
+      (p.material && p.material.toLowerCase().includes(query)) ||
+      (p.sku && p.sku.toLowerCase().includes(query)) ||
+      (p.color && p.color.toLowerCase().includes(query)) ||
+      (p.description && p.description.toLowerCase().includes(query))
+    )
+  })
+})
+
+function selectFurnitureFromSearch(product: Product) {
+  searchQuery.value = ''
+  isSearchOpen.value = false
+  emit('select-product', product)
+}
+
+function handleSearchSubmit() {
+  if (filteredSearchResults.value.length > 0) {
+    selectFurnitureFromSearch(filteredSearchResults.value[0])
+  } else {
+    emit('explore-catalog')
+  }
+}
+
+function onSearchBlur() {
+  setTimeout(() => {
+    isSearchOpen.value = false
+  }, 250)
+}
 
 const heroSlides = [
   {
@@ -333,53 +379,123 @@ onBeforeUnmount(() => {
     <!-- 1. HERO & TOP HEADER SECTION -->
     <header class="w-full bg-white shadow-xs border-b border-stone-200">
 
-      <!-- Top Announcement Bar (Consistent with Lumaro Beige, Black & White Palette) -->
-      <div class="bg-[#f5f2eb] text-stone-900 text-xs py-2.5 px-4 md:px-8 border-b border-stone-200 font-medium tracking-wide">
-        <div class="max-w-7xl mx-auto flex items-center justify-between">
-          <div class="flex-1 text-center font-medium flex items-center justify-center space-x-2">
-            <span class="px-2.5 py-0.5 bg-stone-900 text-white text-[10px] font-black uppercase tracking-wider rounded-xs">
-              Special Offer
-            </span>
-            <span class="text-stone-800">
-              Enjoy up to <strong class="text-stone-950 font-extrabold underline decoration-stone-400">15% discount</strong> for first time buyers
-            </span>
-          </div>
-          <div class="hidden md:block text-right text-stone-600 text-[11px] font-semibold tracking-wider uppercase">
-            Welcome to <span class="text-stone-950 font-bold">Lumaro Furniture Studio</span>
-          </div>
-        </div>
-      </div>
-
       <!-- Main Navigation Header -->
       <div class="max-w-7xl mx-auto px-4 md:px-8 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
 
-        <!-- Search Box (Left) -->
-        <div class="w-full md:w-80 flex items-center">
-          <div class="relative w-full flex items-center border border-stone-900 rounded-none overflow-hidden">
+        <!-- Search Box with Live Furniture Item Picker (Left) -->
+        <div class="relative w-full md:w-84 flex items-center">
+          <div class="relative w-full flex items-center border border-stone-900 rounded-none bg-white shadow-xs focus-within:ring-2 focus-within:ring-stone-900 transition-all">
             <input
               v-model="searchQuery"
+              @focus="isSearchOpen = true"
+              @blur="onSearchBlur"
+              @keydown.enter.prevent="handleSearchSubmit"
               type="text"
-              placeholder=""
-              class="w-full px-3 py-1.5 text-sm bg-transparent focus:outline-none"
+              placeholder="Search furniture items..."
+              class="w-full px-3 py-2 text-xs md:text-sm bg-transparent focus:outline-none placeholder:text-stone-400 font-medium"
             />
-            <button class="bg-black text-white p-2 flex items-center justify-center hover:bg-stone-800 transition-colors">
+            <button
+              v-if="searchQuery"
+              @click="searchQuery = ''"
+              type="button"
+              class="px-2 text-stone-400 hover:text-stone-700 cursor-pointer"
+            >
+              <X class="w-3.5 h-3.5" />
+            </button>
+            <button
+              @click="handleSearchSubmit"
+              class="bg-black text-white px-3 py-2.5 flex items-center justify-center hover:bg-stone-800 transition-colors cursor-pointer"
+              title="Search furniture items"
+            >
               <Search class="w-4 h-4" />
             </button>
           </div>
+
+          <!-- Dynamic Furniture Items Dropdown Menu -->
+          <transition
+            enter-active-class="transition duration-200 ease-out"
+            enter-from-class="transform -translate-y-2 opacity-0"
+            enter-to-class="transform translate-y-0 opacity-100"
+            leave-active-class="transition duration-150 ease-in"
+            leave-from-class="transform translate-y-0 opacity-100"
+            leave-to-class="transform -translate-y-2 opacity-0"
+          >
+            <div
+              v-if="isSearchOpen"
+              class="absolute left-0 right-0 top-full mt-1.5 bg-white border border-stone-300 shadow-2xl z-50 max-h-96 overflow-y-auto divide-y divide-stone-100 rounded-sm"
+            >
+              <!-- Dropdown Header -->
+              <div class="p-2.5 bg-stone-50 text-[11px] font-bold text-stone-700 uppercase tracking-wider flex items-center justify-between">
+                <span>{{ searchQuery ? `Matching Furniture (${filteredSearchResults.length})` : 'Select a Furniture Piece' }}</span>
+                <span class="text-[10px] text-stone-600 font-normal lowercase">Click item to view product</span>
+              </div>
+
+              <!-- List of Furniture Items -->
+              <div v-if="filteredSearchResults.length > 0" class="py-1">
+                <div
+                  v-for="item in filteredSearchResults"
+                  :key="item.id"
+                  @mousedown.prevent="selectFurnitureFromSearch(item)"
+                  class="flex items-center space-x-3 px-3 py-2.5 hover:bg-stone-100 cursor-pointer transition-colors group"
+                >
+                  <img
+                    :src="getPrimaryImageUrl(item)"
+                    :alt="item.name"
+                    class="w-11 h-11 object-cover rounded-md border border-stone-200 shrink-0 group-hover:scale-105 transition-transform"
+                  />
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between">
+                      <p class="text-xs font-bold text-stone-900 truncate group-hover:text-black">
+                        {{ item.name }}
+                      </p>
+                      <span class="text-xs font-black text-stone-950 shrink-0 ml-2">
+                        {{ formatPrice(item.price) }}
+                      </span>
+                    </div>
+                    <div class="flex items-center space-x-2 text-[10px] text-stone-700 mt-0.5">
+                      <span class="px-1.5 py-0.2 bg-stone-200 text-stone-800 rounded font-semibold uppercase tracking-wider text-[9px]">{{ item.category }}</span>
+                      <span v-if="item.material" class="truncate">{{ item.material }}</span>
+                    </div>
+                  </div>
+                  <ArrowUpRight class="w-3.5 h-3.5 text-stone-400 group-hover:text-stone-900 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
+                </div>
+              </div>
+
+              <!-- No Results State -->
+              <div v-else class="p-4 text-center text-xs text-stone-700">
+                <p class="font-semibold">No furniture found for "{{ searchQuery }}"</p>
+                <button
+                  @mousedown.prevent="emit('explore-catalog'); isSearchOpen = false"
+                  class="mt-2 text-stone-900 font-bold underline hover:text-black cursor-pointer"
+                >
+                  Browse entire catalog
+                </button>
+              </div>
+
+              <!-- Dropdown Footer Action -->
+              <div class="p-2 bg-stone-50 text-center border-t border-stone-200">
+                <button
+                  @mousedown.prevent="emit('explore-catalog'); isSearchOpen = false"
+                  class="w-full text-center text-[11px] font-bold text-stone-900 hover:text-black tracking-wide uppercase py-1 cursor-pointer"
+                >
+                  View All Furniture in Catalog &rarr;
+                </button>
+              </div>
+            </div>
+          </transition>
         </div>
 
         <!-- Brand Title & Logo (Center) -->
-        <div class="flex items-center space-x-3 text-center cursor-pointer group" @click="emit('navigate-home')">
-          <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-white text-stone-950 border-2 border-stone-900 flex items-center justify-center p-1 shrink-0 font-black text-sm md:text-base tracking-wider shadow-xs group-hover:border-stone-700 transition-colors">
-            LFS
-          </div>
+        <div class="flex items-center space-x-3 cursor-pointer group" @click="emit('navigate-home')">
+          <img
+            src="https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/lumora/LUMORA-LOGO-removebg-preview.png"
+            alt="Lumaro Logo"
+            class="h-12 md:h-14 lg:h-16 w-auto object-contain shrink-0 drop-shadow-sm group-hover:scale-105 transition-transform"
+          />
           <div class="text-left">
-            <h1 class="text-lg md:text-xl font-black text-stone-950 tracking-tight uppercase group-hover:text-stone-700 transition-colors leading-tight">
+            <h1 class="text-xs md:text-sm lg:text-base font-semibold text-stone-800 tracking-widest uppercase group-hover:text-stone-950 transition-colors leading-tight">
               Lumaro Furniture Studio
             </h1>
-            <span class="text-[9px] md:text-[10px] text-stone-600 tracking-widest uppercase font-bold block leading-tight">
-              Handcrafted Hardwoods
-            </span>
           </div>
         </div>
 

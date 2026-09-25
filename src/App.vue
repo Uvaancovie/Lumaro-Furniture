@@ -2,6 +2,7 @@
 import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { supabase } from './utils/supabase'
+import { defaultFurnitureInventory } from './utils/defaultProducts'
 import type { Product, CartItem } from './types/database'
 import LandingPage from './components/LandingPage.vue'
 import Catalog from './components/Catalog.vue'
@@ -24,7 +25,7 @@ const currentView = computed<'landing' | 'catalog' | 'detail' | 'admin'>(() => {
 })
 
 const selectedProduct = ref<Product | null>(null)
-const allProducts = ref<Product[]>([])
+const allProducts = ref<Product[]>(defaultFurnitureInventory)
 
 const userSession = ref<any>(null)
 const loadingAuth = ref(true)
@@ -108,9 +109,12 @@ async function fetchAllProducts() {
         ...p,
         product_images: [...(p.product_images || [])].sort((a: any, b: any) => (a.sort_order ?? 0) - (b.sort_order ?? 0)),
       }))
+    } else {
+      allProducts.value = defaultFurnitureInventory
     }
   } catch (err) {
     console.error('Error fetching inventory for App:', err)
+    allProducts.value = defaultFurnitureInventory
   }
 }
 
@@ -263,15 +267,14 @@ onMounted(() => {
           @click="navigateTo('landing')"
           class="flex items-center space-x-2.5 sm:space-x-3 cursor-pointer group shrink-0"
         >
-          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white text-stone-950 border-2 border-stone-900 flex items-center justify-center p-1 shrink-0 font-black text-sm sm:text-base tracking-wider group-hover:border-stone-700 transition-colors shadow-xs">
-            LFS
-          </div>
+          <img 
+            src="https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/lumora/LUMORA-LOGO-removebg-preview.png" 
+            alt="Lumaro Logo"
+            class="h-10 sm:h-12 md:h-13 w-auto object-contain shrink-0 drop-shadow-sm group-hover:scale-105 transition-transform"
+          />
           <div>
-            <span class="text-base sm:text-xl font-black text-slate-900 tracking-tight block group-hover:text-stone-700 transition-colors leading-tight">
+            <span class="text-xs sm:text-sm md:text-base font-semibold text-slate-800 tracking-wider block group-hover:text-stone-950 transition-colors leading-tight uppercase">
               Lumaro Furniture Studio
-            </span>
-            <span class="hidden sm:block text-[10px] text-stone-700 tracking-widest uppercase -mt-0.5 font-bold leading-tight">
-              Handcrafted Collection
             </span>
           </div>
         </div>
@@ -504,10 +507,12 @@ onMounted(() => {
     <footer class="bg-white border-t border-slate-200 text-slate-500 py-8 text-xs text-center">
       <div class="max-w-7xl mx-auto px-4 flex flex-col items-center justify-center space-y-3">
         <div class="flex items-center space-x-2.5">
-          <div class="w-7 h-7 rounded-lg bg-white text-stone-950 border border-stone-900 flex items-center justify-center font-black text-xs tracking-wider shadow-xs">
-            LFS
-          </div>
-          <span class="font-black text-slate-900 text-sm tracking-tight uppercase">
+          <img 
+            src="https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/lumora/LUMORA-LOGO-removebg-preview.png" 
+            alt="Lumaro Logo"
+            class="h-8 md:h-9 w-auto object-contain drop-shadow-sm"
+          />
+          <span class="font-semibold text-slate-800 text-xs sm:text-sm tracking-wider uppercase">
             Lumaro Furniture Studio
           </span>
         </div>
