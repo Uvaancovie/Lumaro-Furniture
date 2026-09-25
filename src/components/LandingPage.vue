@@ -29,6 +29,11 @@ import {
   Palette,
   Layers,
   Compass,
+  Package,
+  Clock,
+  Sparkles,
+  Check,
+  AlertCircle,
 } from 'lucide-vue-next'
 
 const props = defineProps<{

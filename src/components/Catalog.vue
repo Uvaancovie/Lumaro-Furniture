@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { supabase } from '../utils/supabase'
+import { defaultFurnitureInventory } from '../utils/defaultProducts'
 import type { Product } from '../types/database'
 import { 
   Search, 
   Box, 
   X, 
-  ShoppingBag,
-  Heart
+  ShoppingBag, 
+  Heart,
+  ArrowUpRight,
+  ArrowRight
 } from 'lucide-vue-next'
 
 const props = defineProps<{
@@ -16,10 +19,11 @@ const props = defineProps<{
 
 const emit = defineEmits(['select-product', 'quick-add-to-cart', 'toggle-wishlist'])
 
-const products = ref<Product[]>([])
+const products = ref<Product[]>(defaultFurnitureInventory)
 const loading = ref(true)
 const errorMessage = ref('')
 const searchQuery = ref('')
+const isSearchOpen = ref(false)
 const selectedCategory = ref('All')
 
 const categories = [
@@ -32,170 +36,13 @@ const categories = [
   'Storage'
 ]
 
-// Sample swatches map to simulate material options seen in screenshot
+// Sample swatches map to simulate material options
 const sampleSwatches: Record<string, string[]> = {
   'Living Room': ['#968774', '#5e5043', '#2c2927', '#c9bdab'],
   'Dining Room': ['#b88a57', '#6e4726', '#261b11'],
   'Storage': ['#d4c4aa', '#8c6d48', '#38322c'],
   'Default': ['#968774', '#5e5043', '#c9bdab']
 }
-
-// Fallback dataset if database is empty initially
-const sampleProducts: Product[] = [
-  {
-    id: 'sample-1',
-    name: 'Rococo Upholstered 3 Seater Couch',
-    slug: 'rococo-upholstered-3-seater-couch',
-    category: 'Living Room',
-    price: 18450.00,
-    stock_quantity: 5,
-    material: 'Textured Linen Blend',
-    color: 'Warm Sand',
-    width: 220, height: 76, depth: 100,
-    is_active: true, is_featured: true,
-    description: 'A classic silhouette with a hint of mid-century style, the Rococo 3-seater couch is an ode to timeless beauty.',
-    sku: 'SOFA-ROC-001',
-    product_images: [
-      { id: 'img-1', product_id: 'sample-1', image_url: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1200&q=80', is_primary: true }
-    ]
-  },
-  {
-    id: 'sample-2',
-    name: 'Breen Upholstered Slouch Right With Daybed',
-    slug: 'breen-upholstered-slouch-right-with-daybed',
-    category: 'Living Room',
-    price: 28900.00,
-    stock_quantity: 3,
-    material: 'Performance Velvet & Solid Wood Frame',
-    color: 'Charcoal Grey',
-    width: 310, height: 85, depth: 160,
-    is_active: true, is_featured: true,
-    description: 'Comfy, cushy, not a hard edge in sight. Rounded edges, soft curves... it is clear that the Breen is made for lazy days.',
-    sku: 'SOFA-BRN-002',
-    product_images: [
-      { id: 'img-2', product_id: 'sample-2', image_url: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=1200&q=80', is_primary: true }
-    ]
-  },
-  {
-    id: 'sample-3',
-    name: 'Santorini Slipcover Corner Couch',
-    slug: 'santorini-slipcover-corner-couch',
-    category: 'Living Room',
-    price: 24200.00,
-    stock_quantity: 8,
-    material: 'Washable Cotton Slipcover',
-    color: 'Oatmeal',
-    width: 280, height: 80, depth: 180,
-    is_active: true, is_featured: true,
-    description: 'The posterchild for Lumaro Furniture Studio classic, oversized couch design. With its comfy, lived-in look, the Santorini is one we are known for.',
-    sku: 'SOFA-SAN-003',
-    product_images: [
-      { id: 'img-3', product_id: 'sample-3', image_url: 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=1200&q=80', is_primary: true }
-    ]
-  },
-  {
-    id: 'sample-4',
-    name: 'Kariega Solid Teak Dining Table',
-    slug: 'kariega-teak-dining-table',
-    category: 'Dining Room',
-    price: 16950.00,
-    stock_quantity: 6,
-    material: 'Solid South African Teak',
-    color: 'Warm Amber',
-    width: 220, height: 76, depth: 100,
-    is_active: true, is_featured: false,
-    description: 'Architectural legs with hand-sculpted joinery, perfect for family dining and formal entertaining.',
-    sku: 'TBL-TEAK-004',
-    product_images: [
-      { id: 'img-4', product_id: 'sample-4', image_url: 'https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?auto=format&fit=crop&w=1200&q=80', is_primary: true }
-    ]
-  },
-  {
-    id: 'sample-5',
-    name: 'Cape Winelands Slatted Credenza',
-    slug: 'cape-winelands-slatted-credenza',
-    category: 'Storage',
-    price: 14200.00,
-    stock_quantity: 4,
-    material: 'Solid Wood & Brushed Brass',
-    color: 'Natural Matte Oak',
-    width: 180, height: 80, depth: 45,
-    is_active: true, is_featured: false,
-    description: 'Minimalist sideboard with soft-close slatted oak doors and velvet-lined internal drawer dividers.',
-    sku: 'STG-OAK-005',
-    product_images: [
-      { id: 'img-5', product_id: 'sample-5', image_url: 'https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=1200&q=80', is_primary: true }
-    ]
-  },
-  {
-    id: 'sample-6',
-    name: 'Table Mountain Bouclé Accent Chair',
-    slug: 'table-mountain-boucle-accent-chair',
-    category: 'Living Room',
-    price: 8950.00,
-    stock_quantity: 10,
-    material: 'Textured Cream Bouclé',
-    color: 'Ivory',
-    width: 82, height: 78, depth: 80,
-    is_active: true, is_featured: true,
-    description: 'Sculptural accent armchair crafted from textured cream bouclé upholstery over a solid ash frame.',
-    sku: 'CHR-BOU-006',
-    product_images: [
-      { id: 'img-6', product_id: 'sample-6', image_url: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&w=1200&q=80', is_primary: true }
-    ]
-  },
-  {
-    id: 'sample-7',
-    name: 'Drakensberg Leather Sofa (3-Seater)',
-    slug: 'drakensberg-leather-sofa',
-    category: 'Living Room',
-    price: 24900.00,
-    stock_quantity: 3,
-    material: 'Full-Grain Aniline Leather & Steel',
-    color: 'Cognac Brown',
-    width: 240, height: 85, depth: 95,
-    is_active: true, is_featured: true,
-    description: 'Luxurious 3-seater sofa wrapped in premium South African full-grain leather that ages beautifully.',
-    sku: 'SOFA-DRK-007',
-    product_images: [
-      { id: 'img-7', product_id: 'sample-7', image_url: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1200&q=80', is_primary: true }
-    ]
-  },
-  {
-    id: 'sample-8',
-    name: 'Stellenbosch Executive Desk',
-    slug: 'stellenbosch-executive-desk',
-    category: 'Office',
-    price: 16800.00,
-    stock_quantity: 4,
-    material: 'Walnut Wood & Powder-Coated Steel',
-    color: 'Dark Walnut',
-    width: 160, height: 75, depth: 70,
-    is_active: true, is_featured: false,
-    description: 'Sophisticated executive desk with integrated wireless phone charging pad and cable management.',
-    sku: 'DSK-WAL-008',
-    product_images: [
-      { id: 'img-8', product_id: 'sample-8', image_url: 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&w=1200&q=80', is_primary: true }
-    ]
-  },
-  {
-    id: 'sample-9',
-    name: 'Clifton Rattan Queen Bed Frame',
-    slug: 'clifton-rattan-queen-bed-frame',
-    category: 'Bedroom',
-    price: 19500.00,
-    stock_quantity: 2,
-    material: 'Solid Oak & Natural Cane Rattan',
-    color: 'Light Oak',
-    width: 168, height: 120, depth: 215,
-    is_active: true, is_featured: true,
-    description: 'Organic minimalist bed frame featuring a hand-woven rattan headboard framed in solid European oak.',
-    sku: 'BED-RAT-009',
-    product_images: [
-      { id: 'img-9', product_id: 'sample-9', image_url: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80', is_primary: true }
-    ]
-  }
-]
 
 async function fetchProducts() {
   loading.value = true
@@ -208,19 +55,19 @@ async function fetchProducts() {
       .order('created_at', { ascending: false })
 
     if (error) {
-      console.warn('Supabase query warning (using sample dataset):', error.message)
-      products.value = sampleProducts
+      console.warn('Supabase query warning (using default dataset):', error.message)
+      products.value = defaultFurnitureInventory
     } else if (data && data.length > 0) {
       products.value = data.map((p: any) => ({
         ...p,
         product_images: [...(p.product_images || [])].sort((a: any, b: any) => (a.sort_order ?? 0) - (b.sort_order ?? 0)),
       }))
     } else {
-      products.value = sampleProducts
+      products.value = defaultFurnitureInventory
     }
   } catch (err: any) {
     console.error('Fetch error:', err)
-    products.value = sampleProducts
+    products.value = defaultFurnitureInventory
   } finally {
     loading.value = false
   }
@@ -238,6 +85,52 @@ const filteredProducts = computed(() => {
     return matchesCategory && matchesSearch
   })
 })
+
+const dropdownSearchResults = computed<Product[]>(() => {
+  const query = searchQuery.value.trim().toLowerCase()
+  const list = products.value && products.value.length > 0 ? products.value : defaultFurnitureInventory
+  if (!query) {
+    return list.slice(0, 8)
+  }
+  return list.filter(p => {
+    return (
+      p.name.toLowerCase().includes(query) ||
+      (p.category && p.category.toLowerCase().includes(query)) ||
+      (p.material && p.material.toLowerCase().includes(query)) ||
+      (p.sku && p.sku.toLowerCase().includes(query)) ||
+      (p.color && p.color.toLowerCase().includes(query)) ||
+      (p.description && p.description.toLowerCase().includes(query))
+    )
+  })
+})
+
+function selectFurnitureFromSearch(product: Product) {
+  searchQuery.value = ''
+  isSearchOpen.value = false
+  emit('select-product', product)
+}
+
+function handleSearchSubmit() {
+  if (dropdownSearchResults.value.length > 0) {
+    selectFurnitureFromSearch(dropdownSearchResults.value[0])
+  } else {
+    isSearchOpen.value = false
+  }
+}
+
+function onSearchBlur() {
+  setTimeout(() => {
+    isSearchOpen.value = false
+  }, 250)
+}
+
+function formatPrice(val: number) {
+  return new Intl.NumberFormat('en-ZA', {
+    style: 'currency',
+    currency: 'ZAR',
+    maximumFractionDigits: 2
+  }).format(val)
+}
 
 function getPrimaryImageUrl(product: Product): string {
   if (product.product_images && product.product_images.length > 0) {
@@ -319,22 +212,108 @@ onMounted(() => {
         </button>
       </div>
 
-      <!-- Minimal Search Box -->
-      <div class="relative min-w-[260px]">
-        <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
-        <input
-          v-model="searchQuery"
-          type="text"
-          placeholder="Search catalog..."
-          class="w-full pl-9 pr-8 py-1.5 bg-transparent border border-stone-300 text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:border-black transition-all"
-        />
-        <button 
-          v-if="searchQuery" 
-          @click="searchQuery = ''" 
-          class="absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700"
+      <!-- Search Box with Live Furniture Item Picker -->
+      <div class="relative min-w-[280px] md:min-w-[320px]">
+        <div class="relative w-full flex items-center border border-stone-300 bg-white focus-within:border-black focus-within:ring-1 focus-within:ring-black transition-all">
+          <input
+            v-model="searchQuery"
+            @focus="isSearchOpen = true"
+            @blur="onSearchBlur"
+            @keydown.enter.prevent="handleSearchSubmit"
+            type="text"
+            placeholder="Search furniture items..."
+            class="w-full pl-3 pr-8 py-2 text-xs md:text-sm bg-transparent text-stone-900 placeholder-stone-400 focus:outline-none font-medium"
+          />
+          <button 
+            v-if="searchQuery" 
+            @click="searchQuery = ''" 
+            type="button"
+            class="p-1.5 text-stone-400 hover:text-stone-700 cursor-pointer"
+            title="Clear search"
+          >
+            <X class="w-3.5 h-3.5" />
+          </button>
+          <button
+            @click="handleSearchSubmit"
+            class="bg-stone-900 text-white px-3 py-2.5 flex items-center justify-center hover:bg-black transition-colors cursor-pointer"
+            title="Search catalog"
+          >
+            <Search class="w-4 h-4" />
+          </button>
+        </div>
+
+        <!-- Dynamic Furniture Items Dropdown Menu -->
+        <transition
+          enter-active-class="transition duration-200 ease-out"
+          enter-from-class="transform -translate-y-2 opacity-0"
+          enter-to-class="transform translate-y-0 opacity-100"
+          leave-active-class="transition duration-150 ease-in"
+          leave-from-class="transform translate-y-0 opacity-100"
+          leave-to-class="transform -translate-y-2 opacity-0"
         >
-          <X class="w-3.5 h-3.5" />
-        </button>
+          <div
+            v-if="isSearchOpen"
+            class="absolute left-0 right-0 top-full mt-1.5 bg-white border border-stone-300 shadow-2xl z-50 max-h-96 overflow-y-auto divide-y divide-stone-100 rounded-sm"
+          >
+            <!-- Dropdown Header -->
+            <div class="p-2.5 bg-stone-50 text-[11px] font-bold text-stone-700 uppercase tracking-wider flex items-center justify-between">
+              <span>{{ searchQuery ? `Matching Furniture (${dropdownSearchResults.length})` : 'Select a Furniture Piece' }}</span>
+              <span class="text-[10px] text-stone-600 font-normal lowercase">Click item to view product</span>
+            </div>
+
+            <!-- List of Furniture Items -->
+            <div v-if="dropdownSearchResults.length > 0" class="py-1">
+              <div
+                v-for="item in dropdownSearchResults"
+                :key="item.id"
+                @mousedown.prevent="selectFurnitureFromSearch(item)"
+                class="flex items-center space-x-3 px-3 py-2.5 hover:bg-stone-100 cursor-pointer transition-colors group"
+              >
+                <img
+                  :src="getPrimaryImageUrl(item)"
+                  :alt="item.name"
+                  class="w-11 h-11 object-cover rounded-md border border-stone-200 shrink-0 group-hover:scale-105 transition-transform"
+                />
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <p class="text-xs font-bold text-stone-900 truncate group-hover:text-black">
+                      {{ item.name }}
+                    </p>
+                    <span class="text-xs font-black text-stone-950 shrink-0 ml-2">
+                      {{ formatPrice(item.price) }}
+                    </span>
+                  </div>
+                  <div class="flex items-center space-x-2 text-[10px] text-stone-700 mt-0.5">
+                    <span class="px-1.5 py-0.2 bg-stone-200 text-stone-800 rounded font-semibold uppercase tracking-wider text-[9px]">{{ item.category }}</span>
+                    <span v-if="item.material" class="truncate">{{ item.material }}</span>
+                  </div>
+                </div>
+                <ArrowUpRight class="w-3.5 h-3.5 text-stone-400 group-hover:text-stone-900 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
+              </div>
+            </div>
+
+            <!-- No Results State -->
+            <div v-else class="p-4 text-center text-xs text-stone-700">
+              <p class="font-semibold">No furniture found for "{{ searchQuery }}"</p>
+              <button
+                @mousedown.prevent="searchQuery = ''; selectedCategory = 'All'; isSearchOpen = false"
+                class="mt-2 text-stone-900 font-bold underline hover:text-black cursor-pointer"
+              >
+                Reset catalog filters
+              </button>
+            </div>
+
+            <!-- Dropdown Footer Action -->
+            <div class="p-2 bg-stone-50 text-center border-t border-stone-200">
+              <button
+                @mousedown.prevent="isSearchOpen = false"
+                class="w-full text-center text-[11px] font-bold text-stone-900 hover:text-black tracking-wide uppercase py-1 cursor-pointer"
+              >
+                Filter Catalog Grid with "{{ searchQuery || 'All' }}" &rarr;
+              </button>
+            </div>
+          </div>
+        </transition>
       </div>
     </div>
 
@@ -345,7 +324,7 @@ onMounted(() => {
       </h2>
       <button 
         @click="selectedCategory = 'All'; searchQuery = ''"
-        class="text-xs uppercase tracking-widest font-bold underline underline-offset-4 text-stone-900 hover:text-stone-600 transition-colors"
+        class="text-xs uppercase tracking-widest font-bold underline underline-offset-4 text-stone-900 hover:text-stone-600 transition-colors cursor-pointer"
       >
         SHOP ALL
       </button>
@@ -369,7 +348,7 @@ onMounted(() => {
       </p>
       <button 
         @click="selectedCategory = 'All'; searchQuery = ''" 
-        class="mt-2 px-5 py-2 bg-stone-900 text-white text-xs font-bold uppercase tracking-wider transition-colors hover:bg-stone-800"
+        class="mt-2 px-5 py-2 bg-stone-900 text-white text-xs font-bold uppercase tracking-wider transition-colors hover:bg-stone-800 cursor-pointer"
       >
         Reset Catalog
       </button>
@@ -405,7 +384,7 @@ onMounted(() => {
           <!-- Quick Add Button Overlay -->
           <button 
             @click.stop="emit('quick-add-to-cart', product)"
-            class="absolute bottom-3 right-3 p-2.5 bg-white/90 hover:bg-black hover:text-white text-stone-900 backdrop-blur-xs rounded-full shadow-md transition-all opacity-0 group-hover:opacity-100"
+            class="absolute bottom-3 right-3 p-2.5 bg-white/90 hover:bg-black hover:text-white text-stone-900 backdrop-blur-xs rounded-full shadow-md transition-all opacity-0 group-hover:opacity-100 cursor-pointer"
             title="Quick Add"
           >
             <ShoppingBag class="w-4 h-4" />
