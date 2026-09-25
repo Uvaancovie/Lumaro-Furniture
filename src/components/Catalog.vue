@@ -275,14 +275,9 @@ onMounted(() => {
                   class="w-11 h-11 object-cover rounded-md border border-stone-200 shrink-0 group-hover:scale-105 transition-transform"
                 />
                 <div class="flex-1 min-w-0">
-                  <div class="flex items-center justify-between">
-                    <p class="text-xs font-bold text-stone-900 truncate group-hover:text-black">
-                      {{ item.name }}
-                    </p>
-                    <span class="text-xs font-black text-stone-950 shrink-0 ml-2">
-                      {{ formatPrice(item.price) }}
-                    </span>
-                  </div>
+                  <p class="text-xs font-bold text-stone-900 truncate group-hover:text-black">
+                    {{ item.name }}
+                  </p>
                   <div class="flex items-center space-x-2 text-[10px] text-stone-700 mt-0.5">
                     <span class="px-1.5 py-0.2 bg-stone-200 text-stone-800 rounded font-semibold uppercase tracking-wider text-[9px]">{{ item.category }}</span>
                     <span v-if="item.material" class="truncate">{{ item.material }}</span>
