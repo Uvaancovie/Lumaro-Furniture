@@ -500,39 +500,27 @@ onBeforeUnmount(() => {
         </div>
 
         <!-- Quick Utility Icons (Right) -->
-        <div class="flex items-center space-x-6 text-stone-800 text-[10px] uppercase font-bold tracking-wider">
-          <button class="flex flex-col items-center space-y-1 hover:text-black transition-colors">
-            <MapPin class="w-4 h-4 stroke-[1.5]" />
-            <span>Find A Store</span>
-          </button>
-
-          <button @click="emit('navigate-admin')" class="flex flex-col items-center space-y-1 hover:text-black transition-colors">
-            <User class="w-4 h-4 stroke-[1.5]" />
-            <span>Sign In</span>
-          </button>
-
-          <button class="flex flex-col items-center space-y-1 hover:text-black transition-colors">
-            <Truck class="w-4 h-4 stroke-[1.5]" />
-            <span>Track Order</span>
-          </button>
-
+        <div class="flex items-center space-x-4 text-stone-800 text-[10px] uppercase font-bold tracking-wider">
           <button
-    @click="emit('open-wishlist')"
-    class="group relative flex flex-col items-center space-y-1 transition-colors"
-  >
-    <span class="p-2.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-full shadow-sm transition-all border border-rose-200">
-      <Heart class="w-4 h-4 stroke-[1.5]" />
-    </span>
-    <span class="text-stone-800 group-hover:text-black">Wishlist</span>
-    <span
-      v-if="(props.wishlist?.length || 0) > 0"
-      class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-rose-600 text-white text-[10px] font-black rounded-full flex items-center justify-center shadow-md"
-    >
-      {{ props.wishlist?.length }}
-    </span>
-  </button>
+            @click="emit('open-wishlist')"
+            class="group relative flex flex-col items-center space-y-1 transition-colors cursor-pointer"
+          >
+            <span class="p-2.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-full shadow-sm transition-all border border-rose-200">
+              <Heart class="w-4 h-4 stroke-[1.5]" />
+            </span>
+            <span class="text-stone-800 group-hover:text-black">Wishlist</span>
+            <span
+              v-if="(props.wishlist?.length || 0) > 0"
+              class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-rose-600 text-white text-[10px] font-black rounded-full flex items-center justify-center shadow-md"
+            >
+              {{ props.wishlist?.length }}
+            </span>
+          </button>
 
-          <button @click="emit('open-cart')" class="group relative flex flex-col items-center space-y-1 transition-colors">
+          <button 
+            @click="emit('open-cart')" 
+            class="group relative flex flex-col items-center space-y-1 transition-colors cursor-pointer"
+          >
             <span class="p-2.5 bg-white/90 hover:bg-black hover:text-white text-stone-900 backdrop-blur-xs rounded-full shadow-md transition-all border border-stone-200">
               <ShoppingBag class="w-4 h-4 stroke-[1.5]" />
             </span>
