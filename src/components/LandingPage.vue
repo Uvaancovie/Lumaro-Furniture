@@ -117,7 +117,7 @@ const heroSlides = [
   {
     image: 'https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/58d59cbc-43e5-4488-9068-8b0b4f45ffcb/1787293170209-1.jpg',
     title: 'TIMELESS SPACES.',
-    subtitle: 'SCULPTED TIMBER.',
+    subtitle: 'SCULPTED WOOD.',
     alt: 'Luxury Contemporary Dining Set',
   },
   {
@@ -287,7 +287,7 @@ const communityFavorites = computed(() => {
       name: 'MODERN STYLISH CHAIR',
       displayTitle: 'MODERN STYLISH CHAIR',
       category: 'Accent Seating',
-      subtitle: 'Full-Grain Bouclé & Dark Walnut',
+      subtitle: 'Solid Wood & Bouclé',
       imageUrl: 'https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/a9411a86-b059-468b-9c03-c29e311bbb71/1787296485552-0.jpg',
     },
     {
@@ -295,7 +295,7 @@ const communityFavorites = computed(() => {
       name: 'SLEEK LOUNGE CHAIR',
       displayTitle: 'SLEEK LOUNGE CHAIR',
       category: 'Living Room',
-      subtitle: 'Solid Teak & Aniline Leather',
+      subtitle: 'Solid Teak & Wood',
       imageUrl: 'https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/product-images/abd82667-c642-4043-a57a-5fef2597dd23/1786602279649-0.jpg',
     },
     {
@@ -352,7 +352,7 @@ const faqs = [
   },
   {
     question: 'Can I order custom dimensions for dining tables or credenzas?',
-    answer: 'Yes! All Lumaro Furniture Studio pieces are handcrafted in our South African workshop. We can adjust width, length, height, and timber finishes to match your interior design project.'
+    answer: 'Yes! All Lumaro Furniture Studio pieces are handcrafted in our South African workshop. We can adjust width, length, height, and wood finishes to match your interior design project.'
   },
   {
     question: 'What wood materials do you use?',
@@ -360,7 +360,7 @@ const faqs = [
   },
   {
     question: 'What warranty is included?',
-    answer: 'Every piece of Lumaro Furniture Studio is backed by our 10-Year Structural Timber Warranty against warping, joint separation, and structural defects.'
+    answer: 'Every piece of Lumaro Furniture Studio is backed by our 10-Year Structural Wood Warranty against warping, joint separation, and structural defects.'
   }
 ]
 
@@ -599,7 +599,7 @@ onBeforeUnmount(() => {
             <!-- Bottom Left Main Content -->
             <div class="space-y-4 max-w-2xl pointer-events-auto pb-4">
               <p class="text-sm md:text-base text-stone-200 font-medium max-w-lg leading-relaxed drop-shadow-xs">
-                South African timber architectural furniture, custom manufactured for residential luxury, hospitality, and corporate executive suites.
+                South African wood architectural furniture, custom manufactured for residential luxury, hospitality, and corporate executive suites.
               </p>
               <div class="flex flex-wrap items-center gap-3 pt-2">
                 <button
@@ -713,7 +713,7 @@ onBeforeUnmount(() => {
             <div class="p-5 space-y-1.5 bg-white flex-1 flex flex-col justify-between">
               <div>
                 <span class="text-[10px] font-black tracking-widest uppercase text-stone-700 block">
-                  HANDCRAFTED TIMBER
+                  WOOD
                 </span>
                 <h3 class="text-sm font-black text-stone-950 uppercase tracking-tight group-hover:text-stone-700 transition-colors line-clamp-1">
                   {{ item.displayTitle || item.name }}
@@ -746,7 +746,7 @@ onBeforeUnmount(() => {
             <div class="absolute bottom-6 left-6 right-6 text-white space-y-1">
               <span class="text-xs text-stone-300 font-bold uppercase tracking-wider">Seating & Lounging</span>
               <h3 class="text-xl font-extrabold">Living Room</h3>
-              <p class="text-xs text-slate-300 line-clamp-1">Full-grain leather sofas & bouclé armchairs.</p>
+              <p class="text-xs text-slate-300 line-clamp-1">Wood sofas & bouclé armchairs.</p>
             </div>
           </div>
 
@@ -806,12 +806,12 @@ onBeforeUnmount(() => {
             </h2>
           </div>
           <p class="text-xs text-stone-600 max-w-md leading-relaxed font-medium">
-            Building South Africa's finest handcrafted timber furniture through uncompromising principles and bespoke manufacturing.
+            Building South Africa's finest handcrafted wood furniture through uncompromising principles and bespoke manufacturing.
           </p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          <!-- Left Panel: Strategic Advantage (The Lumaro Difference Light Timber Pillar) -->
+          <!-- Left Panel: Strategic Advantage (The Lumaro Difference Light Wood Pillar) -->
           <div class="lg:col-span-5 bg-[#d6d3d1] text-stone-950 rounded-3xl p-8 md:p-10 border border-stone-400/80 shadow-md flex flex-col justify-between space-y-8 relative overflow-hidden">
             <!-- Subtle background accent element -->
             <div class="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full blur-3xl pointer-events-none"></div>
@@ -857,7 +857,7 @@ onBeforeUnmount(() => {
             </div>
 
             <div class="pt-6 border-t border-stone-400/80 flex items-center justify-between text-[11px] text-stone-800 font-semibold relative z-10">
-              <span>South African Timber Craft</span>
+              <span>South African Wood Craft</span>
               <span class="text-stone-950 font-black underline decoration-stone-500">10-Year Structural Guarantee</span>
             </div>
           </div>
@@ -882,7 +882,7 @@ onBeforeUnmount(() => {
               </div>
               <div class="pt-3 border-t border-stone-100 text-[10px] font-bold text-stone-700 uppercase tracking-wider flex items-center space-x-1.5">
                 <div class="w-1.5 h-1.5 bg-stone-900 rounded-full"></div>
-                <span>Hand-finished Solid Timbers</span>
+                <span>Hand-finished Solid Woods</span>
               </div>
             </div>
 
@@ -1149,7 +1149,7 @@ onBeforeUnmount(() => {
                 </div>
                 <div class="p-4 space-y-1.5">
                   <h4 class="text-sm font-extrabold text-slate-900">Executive Desk Series</h4>
-                  <p class="text-[11px] text-slate-500 leading-normal">Bespoke solid timber desks with integrated wire channels.</p>
+                  <p class="text-[11px] text-slate-500 leading-normal">Bespoke solid wood desks with integrated wire channels.</p>
                 </div>
               </div>
 
@@ -1260,7 +1260,7 @@ onBeforeUnmount(() => {
                 </div>
                 <div class="p-4 space-y-1.5">
                   <h4 class="text-sm font-extrabold text-slate-900">Restaurant Fit-outs</h4>
-                  <p class="text-[11px] text-slate-500 leading-normal">Custom banquet booths and solid timber dining tables.</p>
+                  <p class="text-[11px] text-slate-500 leading-normal">Custom banquet booths and solid wood dining tables.</p>
                 </div>
               </div>
 
@@ -1349,7 +1349,7 @@ onBeforeUnmount(() => {
                 </div>
                 <div class="p-4 space-y-1.5">
                   <h4 class="text-sm font-extrabold text-slate-900">Custom Built-in Wardrobes</h4>
-                  <p class="text-[11px] text-slate-500 leading-normal">Handcrafted solid timber closets with concealed LED illumination.</p>
+                  <p class="text-[11px] text-slate-500 leading-normal">Handcrafted solid wood closets with concealed LED illumination.</p>
                 </div>
               </div>
 
@@ -1543,11 +1543,11 @@ onBeforeUnmount(() => {
           <div class="lg:col-span-6 relative rounded-2xl overflow-hidden shadow-2xl border border-slate-200 group">
             <img
               :src="craftsmanshipImageUrl"
-              alt="Lumaro Furniture Studio Authentic Timber Craftsmanship"
+              alt="Lumaro Furniture Studio Authentic Wood Craftsmanship"
               class="w-full h-[400px] object-cover group-hover:scale-105 transition-transform duration-500"
             />
             <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl text-xs font-bold text-slate-900 border border-slate-200 shadow-md">
-              Real Timber Inventory — Supabase Storage
+              Wood
             </div>
           </div>
 
