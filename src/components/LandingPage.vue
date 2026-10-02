@@ -356,11 +356,11 @@ const faqs = [
   },
   {
     question: 'What wood materials do you use?',
-    answer: 'We use sustainably harvested woods, solid wood, oaks, and ashwood sourced responsibly.'
+    answer: 'We use sustainably harvested solid wood sourced responsibly with a deep commitment to taking care of the environment.'
   },
   {
     question: 'What warranty is included?',
-    answer: 'Every piece of Lumaro Furniture Studio is backed by our 10-Year Structural Wood Warranty against warping, joint separation, and structural defects.'
+    answer: 'Every piece of Lumaro Furniture Studio is backed by a reasonable warranty covering authentic craftsmanship, structural integrity, and materials.'
   }
 ]
 
@@ -858,7 +858,7 @@ onBeforeUnmount(() => {
 
             <div class="pt-6 border-t border-stone-400/80 flex items-center justify-between text-[11px] text-stone-800 font-semibold relative z-10">
               <span>South African Wood Craft</span>
-              <span class="text-stone-950 font-black underline decoration-stone-500">10-Year Structural Guarantee</span>
+              <span class="text-stone-950 font-black underline decoration-stone-500">Reasonable Warranty</span>
             </div>
           </div>
 
@@ -1567,15 +1567,15 @@ onBeforeUnmount(() => {
               <div class="flex items-start space-x-3">
                 <CheckCircle2 class="w-5 h-5 text-stone-700 shrink-0 mt-0.5" />
                 <div>
-                  <h4 class="font-bold text-slate-900 text-sm">Sustainably Harvested Woods</h4>
-                  <p class="text-xs text-slate-500">We use sustainably harvested woods, solid wood, oaks, and ashwood sourced responsibly.</p>
+                  <h4 class="font-bold text-slate-900 text-sm">Taking Care of the Environment is a Part of Our Values</h4>
+                  <p class="text-xs text-slate-500">We use sustainably harvested solid wood sourced responsibly with a deep commitment to environmental care.</p>
                 </div>
               </div>
 
               <div class="flex items-start space-x-3">
                 <CheckCircle2 class="w-5 h-5 text-stone-700 shrink-0 mt-0.5" />
                 <div>
-                  <h4 class="font-bold text-slate-900 text-sm">Mortise & Tenon Joinery</h4>
+                  <h4 class="font-bold text-slate-900 text-sm">Joinery</h4>
                   <p class="text-xs text-slate-500">Traditional wood joinery methods providing structural stability.</p>
                 </div>
               </div>
@@ -1583,7 +1583,7 @@ onBeforeUnmount(() => {
               <div class="flex items-start space-x-3">
                 <CheckCircle2 class="w-5 h-5 text-stone-700 shrink-0 mt-0.5" />
                 <div>
-                  <h4 class="font-bold text-slate-900 text-sm">Non-Toxic Protective Sealants</h4>
+                  <h4 class="font-bold text-slate-900 text-sm">Safe Non-Toxic Protective Sealants</h4>
                   <p class="text-xs text-slate-500">Eco-friendly protective finishes safe for indoor environments and family living.</p>
                 </div>
               </div>
