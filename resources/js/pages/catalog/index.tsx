@@ -148,7 +148,7 @@ const FilterDropdown = memo(function FilterDropdown({
                     isVertical ? 'w-full justify-between' : ''
                 } ${
                     openDropdown === id
-                        ? 'border-amber-600 bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400'
+                        ? 'border-amber-900 bg-amber-900/10 text-amber-900 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-700 font-medium'
                         : 'border-input bg-background hover:bg-accent'
                 }`}
             >
@@ -208,7 +208,7 @@ function ProductCard({ product }: { product: Product }) {
                     )}
                     <div className="absolute left-2 top-2 flex gap-1">
                         {product.is_featured && (
-                            <Badge className="bg-amber-600 hover:bg-amber-700 text-white border-0">Featured</Badge>
+                            <Badge className="bg-amber-900 hover:bg-amber-950 text-stone-100 border-0 dark:bg-amber-800">Featured</Badge>
                         )}
                         {product.stock_quantity <= 5 && product.stock_quantity > 0 && (
                             <Badge variant="secondary" className="text-xs">Low Stock</Badge>
@@ -221,7 +221,7 @@ function ProductCard({ product }: { product: Product }) {
                     <div className="absolute inset-x-0 bottom-0 translate-y-full bg-gradient-to-t from-black/60 to-transparent p-4 pt-8 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
                         <Button
                             size="sm"
-                            className="w-full gap-1.5 bg-white text-black hover:bg-gray-100"
+                            className="w-full gap-1.5 bg-stone-100 text-stone-900 hover:bg-white font-medium"
                             disabled={product.stock_quantity === 0 || addingId === product.id}
                             onClick={handleQuickAdd}
                         >
@@ -231,7 +231,7 @@ function ProductCard({ product }: { product: Product }) {
                     </div>
                 </div>
                 <div className="p-4">
-                    <h3 className="truncate text-sm font-medium group-hover:text-amber-600 transition-colors">{product.name}</h3>
+                    <h3 className="truncate text-sm font-medium group-hover:text-amber-900 dark:group-hover:text-amber-400 transition-colors">{product.name}</h3>
                     <p className="mt-1.5 text-lg font-bold">{formatPrice(product.price)}</p>
                     <div className="text-muted-foreground mt-1.5 flex items-center gap-2 text-xs">
                         {product.material && <span>{product.material}</span>}
@@ -583,14 +583,14 @@ export default function CatalogIndex({ products, categories, materials, colors, 
 
     return (
         <>
-            <Head title="Catalog">
-                <meta name="description" content={`Browse our furniture catalog — ${products.total} products available.`} />
+            <Head title="Catalog — Lumaro Furniture Studio">
+                <meta name="description" content={`Browse Lumaro Furniture Studio handcrafted collection — ${products.total} products available in rich brown and neutral tones.`} />
             </Head>
 
             <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
                 <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                        <h1 className="text-3xl font-bold tracking-tight">Catalog</h1>
+                        <h1 className="text-3xl font-bold tracking-tight text-stone-900 dark:text-stone-100">Studio Catalog</h1>
                         <p className="text-muted-foreground mt-1 text-sm">
                             {products.from}–{products.to} of {products.total} products
                         </p>
@@ -730,7 +730,7 @@ export default function CatalogIndex({ products, categories, materials, colors, 
                                             href={link.url}
                                             className={`flex size-9 items-center justify-center rounded-md text-sm font-medium transition-colors ${
                                                 link.active
-                                                    ? 'bg-amber-600 text-white'
+                                                    ? 'bg-amber-900 text-stone-50 dark:bg-amber-800'
                                                     : 'hover:bg-accent text-muted-foreground hover:text-foreground'
                                             }`}
                                             preserveState

@@ -144,7 +144,7 @@ export default function CatalogShow({ product, relatedProducts, provinces }: Pro
             <Head title={product.name}>
                 <meta name="description" content={product.description ? product.description.substring(0, 160) : `${product.name} — ${formatPrice(product.price)}`} />
                 <meta property="og:title" content={product.name} />
-                <meta property="og:description" content={product.description ? product.description.substring(0, 160) : `${product.name} — Funeral furniture at SA Funeral Supplies`} />
+                <meta property="og:description" content={product.description ? product.description.substring(0, 160) : `${product.name} — Handcrafted furniture at Lumaro Furniture Studio`} />
                 {selectedImage && <meta property="og:image" content={`/storage/${selectedImage}`} />}
                 <meta property="og:type" content="product" />
                 <meta name="twitter:card" content="summary_large_image" />

@@ -227,8 +227,8 @@
 
     <div class="invoice-header">
         <div class="brand">
-            <h1>South African Funeral Supplies</h1>
-            <p>Funeral Furniture &amp; Services</p>
+            <h1>Lumaro Furniture Studio</h1>
+            <p>Handcrafted Furniture Studio</p>
             <p>Johannesburg, South Africa</p>
         </div>
         <div class="invoice-title">
@@ -328,8 +328,8 @@
     @endif
 
     <div class="invoice-footer">
-        <p><strong>South African Funeral Supplies</strong> &mdash; Funeral Furniture &amp; Services &bull; Johannesburg, South Africa</p>
-        <p>Email: info@safunerals.co.za &bull; Phone: +27 11 234 5678</p>
+        <p><strong>Lumaro Furniture Studio</strong> &mdash; Handcrafted Furniture Studio &bull; Johannesburg, South Africa</p>
+        <p>Email: info@lumarofurniture.co.za &bull; Phone: +27 11 234 5678</p>
         <div class="bank-info">
             <p><strong>Payment:</strong> Bank: First National Bank &bull; Account: 6284 1926 187 &bull; Branch Code: 255005 &bull; Reference: {{ $order->order_number }}</p>
         </div>

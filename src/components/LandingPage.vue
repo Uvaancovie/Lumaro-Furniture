@@ -34,6 +34,7 @@ import {
   Sparkles,
   Check,
   AlertCircle,
+  Mail,
 } from 'lucide-vue-next'
 
 const props = defineProps<{
@@ -50,7 +51,8 @@ const emit = defineEmits([
   'open-wishlist',
   'navigate-admin',
   'toggle-wishlist',
-  'navigate-home'
+  'navigate-home',
+  'navigate-contact',
 ])
 
 const liveProducts = ref<Product[]>(defaultFurnitureInventory)
@@ -542,6 +544,13 @@ onBeforeUnmount(() => {
             >
               {{ item }}
             </button>
+            <button
+              @click="emit('navigate-contact')"
+              class="px-3 py-1.5 text-amber-400 hover:text-amber-300 transition-colors cursor-pointer font-bold flex items-center space-x-1 shrink-0"
+            >
+              <Mail class="w-3.5 h-3.5" />
+              <span>Contact Us</span>
+            </button>
           </div>
 
           <!-- Mobile toggle -->
@@ -573,6 +582,13 @@ onBeforeUnmount(() => {
               class="px-3 py-3 text-left hover:bg-white/5 hover:text-stone-300 rounded-lg transition-colors cursor-pointer"
             >
               {{ item }}
+            </button>
+            <button
+              @click="emit('navigate-contact')"
+              class="col-span-2 px-3 py-3 text-left bg-white/5 text-amber-400 hover:text-amber-300 rounded-lg transition-colors cursor-pointer font-bold flex items-center space-x-2"
+            >
+              <Mail class="w-4 h-4" />
+              <span>Contact Studio (Inquiries)</span>
             </button>
           </div>
         </div>

@@ -7,20 +7,22 @@ import type { Product, CartItem } from './types/database'
 import LandingPage from './components/LandingPage.vue'
 import Catalog from './components/Catalog.vue'
 import ProductDetail from './components/ProductDetail.vue'
+import Contact from './components/Contact.vue'
 import AdminLogin from './components/AdminLogin.vue'
 import AdminUpload from './components/AdminUpload.vue'
 import CartDrawer from './components/CartDrawer.vue'
 import WishlistDrawer from './components/WishlistDrawer.vue'
-import { Store, ShieldCheck, LogOut, ShoppingBag, Building2, CheckCircle2, Home, Menu, X } from 'lucide-vue-next'
+import { Store, ShieldCheck, LogOut, ShoppingBag, Building2, CheckCircle2, Home, Menu, X, Mail } from 'lucide-vue-next'
 
 const route = useRoute()
 const router = useRouter()
 
-const currentView = computed<'landing' | 'catalog' | 'detail' | 'admin'>(() => {
+const currentView = computed<'landing' | 'catalog' | 'detail' | 'admin' | 'contact'>(() => {
   const name = route.name
   if (name === 'catalog') return 'catalog'
   if (name === 'product') return 'detail'
   if (name === 'admin') return 'admin'
+  if (name === 'contact') return 'contact'
   return 'landing'
 })
 
@@ -46,12 +48,13 @@ const totalCartCount = computed(() => {
 
 const mobileMenuOpen = ref(false)
 
-function navigateTo(view: 'landing' | 'catalog' | 'detail' | 'admin') {
+function navigateTo(view: 'landing' | 'catalog' | 'detail' | 'admin' | 'contact') {
   const paths: Record<string, string> = {
     landing: '/',
     catalog: '/catalog',
     detail: '/catalog',
     admin: '/admin',
+    contact: '/contact',
   }
   router.push(paths[view])
   mobileMenuOpen.value = false
@@ -87,6 +90,8 @@ watch(
       document.title = `${productName} | Lumaro Furniture Studio`
     } else if (name === 'catalog') {
       document.title = 'Catalog | Lumaro Furniture Studio'
+    } else if (name === 'contact') {
+      document.title = 'Contact Us | Lumaro Furniture Studio'
     } else if (name === 'admin') {
       document.title = 'Admin Portal | Lumaro Furniture Studio'
     } else {
@@ -301,6 +306,19 @@ onMounted(() => {
             <span>Catalog</span>
           </button>
           <button
+            @click="navigateTo('contact')"
+            :class="[
+              'px-3 lg:px-4 py-2 text-xs lg:text-sm font-bold rounded-lg lg:rounded-xl transition-all flex items-center space-x-1.5 cursor-pointer whitespace-nowrap',
+              currentView === 'contact' 
+                ? 'bg-stone-700 text-white shadow-md shadow-stone-700/20' 
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200'
+            ]"
+          >
+            <Mail class="w-4 h-4" />
+            <span>Contact</span>
+          </button>
+          <button
+            v-if="userSession && currentView !== 'contact'"
             @click="navigateTo('admin')"
             :class="[
               'px-3 lg:px-4 py-2 text-xs lg:text-sm font-bold rounded-lg lg:rounded-xl transition-all flex items-center space-x-1.5 cursor-pointer whitespace-nowrap',
@@ -384,6 +402,17 @@ onMounted(() => {
             <span>Catalog</span>
           </button>
           <button
+            @click="navigateTo('contact')"
+            :class="[
+              'w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-bold transition-all cursor-pointer',
+              currentView === 'contact' ? 'bg-stone-700 text-white' : 'text-slate-700 hover:bg-slate-100'
+            ]"
+          >
+            <Mail class="w-5 h-5" />
+            <span>Contact Us</span>
+          </button>
+          <button
+            v-if="userSession && currentView !== 'contact'"
             @click="navigateTo('admin')"
             :class="[
               'w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-bold transition-all cursor-pointer',
@@ -462,6 +491,7 @@ onMounted(() => {
           @navigate-admin="navigateTo('admin')"
           @toggle-wishlist="toggleWishlist"
           @navigate-home="navigateTo('landing')"
+          @navigate-contact="navigateTo('contact')"
         />
       </div>
 
@@ -500,27 +530,55 @@ onMounted(() => {
           @authenticated="handleAuthenticated" 
         />
       </template>
+
+      <!-- View 4: Contact Studio -->
+      <Contact 
+        v-else-if="currentView === 'contact'" 
+        :products="allProducts"
+        @back-to-catalog="navigateTo('catalog')"
+      />
       </div>
     </main>
 
     <!-- Royal White Footer -->
-    <footer class="bg-white border-t border-slate-200 text-slate-500 py-8 text-xs text-center">
-      <div class="max-w-7xl mx-auto px-4 flex flex-col items-center justify-center space-y-3">
-        <div class="flex items-center space-x-2.5">
+    <footer class="bg-white border-t border-slate-200 text-slate-500 py-10 text-xs text-center">
+      <div class="max-w-7xl mx-auto px-4 flex flex-col items-center justify-center space-y-4">
+        <div 
+          @click="navigateTo('landing')"
+          class="flex items-center space-x-2.5 cursor-pointer group"
+        >
           <img 
             src="https://vydleiyxfqrhxoddbcpi.supabase.co/storage/v1/object/public/lumora/LUMORA-LOGO-removebg-preview.png" 
             alt="Lumaro Logo"
-            class="h-8 md:h-9 w-auto object-contain drop-shadow-sm"
+            class="h-9 md:h-10 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform"
           />
-          <span class="font-semibold text-slate-800 text-xs sm:text-sm tracking-wider uppercase">
+          <span class="font-bold text-slate-900 text-xs sm:text-sm tracking-widest uppercase">
             Lumaro Furniture Studio
           </span>
         </div>
-        <p class="font-bold text-slate-800">
-          Handcrafted Hardwood & Architectural Furniture Collection
+
+        <!-- Footer Navigation Links -->
+        <div class="flex flex-wrap items-center justify-center gap-6 text-xs font-bold text-stone-700">
+          <button @click="navigateTo('landing')" class="hover:text-stone-950 transition-colors cursor-pointer">
+            Home
+          </button>
+          <button @click="navigateTo('catalog')" class="hover:text-stone-950 transition-colors cursor-pointer">
+            Furniture Catalog
+          </button>
+          <button @click="navigateTo('contact')" class="text-amber-700 hover:text-amber-800 transition-colors cursor-pointer flex items-center space-x-1">
+            <Mail class="w-3.5 h-3.5" />
+            <span>Contact Us</span>
+          </button>
+          <a href="mailto:enquiries@lumarofurniture.co.za" class="hover:text-stone-950 transition-colors">
+            enquiries@lumarofurniture.co.za
+          </a>
+        </div>
+
+        <p class="font-semibold text-slate-700">
+          Handcrafted Hardwood & Architectural Furniture Collection &bull; South Africa
         </p>
-        <p class="text-slate-400">
-          Crafted with sustainably sourced South African hardwoods, natural wax sealants, and precision joinery.
+        <p class="text-slate-400 max-w-xl">
+          Crafted with sustainably sourced South African hardwoods, natural wax sealants, and precision joinery. White-glove delivery nationwide.
         </p>
       </div>
     </footer>
